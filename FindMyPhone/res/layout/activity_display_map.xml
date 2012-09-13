@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chris Card | 9/3/12 | This class displays the google maps view with the location of the phone
+		overlayed on it -->
+<RelativeLayout
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical">
+    	
+        <com.google.android.maps.MapView
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:enabled="true"
+    		android:clickable="true"
+    		android:apiKey="0MJx1-7oUcZFUpmbpD-KiY5R4Lk7IjsfyBuEkRQ"/>
+</RelativeLayout>

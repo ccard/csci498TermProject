@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chris Card | 8/21/12 | This is the login screen for the app -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical" >
+
+    <requestFocus />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="23dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/logintitle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="Please Log In"
+                android:textSize="25dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/emaltitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email:" />
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="18sp"
+                    android:ems="10"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:scrollHorizontally="false"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30px"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/pass"
+                    android:layout_width="0dp"
+                    android:layout_height="40px"
+                    android:layout_weight="1"
+                    android:text="Password:" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
+                    android:ems="8"
+                    android:textSize="18sp"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:scrollHorizontally="false"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/login"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="40px"
+                android:textStyle="bold"
+                android:background="@drawable/login_button"
+                android:text="Login" />
+
+            <TextView
+                android:id="@+id/createAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="15sp"
+                android:layout_marginTop="40px"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:text="Creat Account" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

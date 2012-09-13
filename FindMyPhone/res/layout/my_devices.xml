@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chris Card | 9/6/12 | This has the view flipper and all the option and widgets to allow
+	the user to find the phone send a message or tone to the phone -->
+
+
+    <ViewFlipper
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/viewFlipperMyDevice"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp">
+
+        <ListView
+            android:id="@+id/MyPhones"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10px" />
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10px" >
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/phoneicon" />
+
+                    <TextView
+                        android:id="@+id/phonename"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="23sp"
+                        android:text="myphones" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <TextView
+                        android:id="@+id/sendamessage"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="25sp"
+                        android:textColor="@android:color/black"
+                        android:background="@drawable/roundedboarders"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="true"
+                        android:text="Send Message" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <TextView
+                        android:id="@+id/showphone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="25sp"
+                        android:textColor="@android:color/black"
+                        android:background="@drawable/roundedboarders"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="true"
+                        android:text="Show Phone Location" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <TextView
+                        android:id="@+id/playtone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="25sp"
+                        android:textColor="@android:color/black"
+                        android:background="@drawable/roundedboarders"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="true"
+                        android:text="Play a tone" />
+                </LinearLayout>
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:id="@+id/backphone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text=" Back to my phones" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10px" >
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/sendMessagetitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Message:" 
+                    android:textSize="23sp"/>
+            </TableRow>
+
+            <TableRow>
+
+                    <EditText
+                        android:id="@+id/message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:gravity="top"
+                        android:lines="3"
+                        android:scrollHorizontally="false"
+                        android:maxLines="3"
+                        android:maxWidth="200sp"
+                        android:background="@drawable/messagebackground"
+                        android:layout_marginTop="10dp"/>
+
+               
+            </TableRow>
+
+            <TableRow>
+
+                    <Button
+                        android:id="@+id/send"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Send" />
+               
+            </TableRow>
+            <TableRow>
+
+                    <Button
+                        android:id="@+id/backsend"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Back to phone options" />
+               
+            </TableRow>
+        </TableLayout>
+    </ViewFlipper>
+

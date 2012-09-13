@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chris Card | 9/6/12 | layout for phone in the listview in my_devices class and layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10px"
+    android:layout_marginTop="10px"
+    android:orientation="horizontal" >
+	<ImageView 
+	    android:id="@+id/phoneicon"
+	    android:layout_height="50px"
+	    android:layout_width="50px"
+	    android:src="@drawable/phoneicon"/>
+
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+
+	    <TextView
+	        android:id="@+id/phoneName"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:textSize="23sp"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_weight="1"
+	        android:text="MyPhone" />
+
+	    <TextView
+	        android:id="@+id/phoneType"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:textSize="23sp"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_weight="1"
+	        android:text="phonetype" />
+	</LinearLayout>
+
+</LinearLayout>

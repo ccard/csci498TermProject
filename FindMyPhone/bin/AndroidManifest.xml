@@ -1,0 +1,68 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="csci498.ccard.findmyphone"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+        <supports-screens
+            android:largeScreens="true"
+            android:normalScreens="true"
+            android:smallScreens="false"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    
+
+    <application
+        android:icon="@drawable/applogo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" 
+        android:debuggable="true">
+         <uses-library android:name="com.google.android.maps" />
+        <activity
+            android:name=".FindMyPhone"
+            android:label="@string/title_activity_find_my_phone" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DisplayMap"
+            android:label="@string/title_activity_display_map"
+            android:parentActivityName=".MyDevices" 
+            android:theme="@style/MapTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MyDevices"
+            android:label="@string/title_activity_my_devices" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="csci498.ccard.findmyphone.FindMyPhone" />
+        </activity>
+
+         <activity
+            android:name=".CreatAccount"
+            android:label="@string/title_activity_creat_account" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="csci498.ccard.findmyphone.FindMyPhone" />
+        </activity>
+        
+       
+       
+    </application>
+
+   
+
+</manifest>
