@@ -27,7 +27,9 @@
          <uses-library android:name="com.google.android.maps" />
         <activity
             android:name=".FindMyPhone"
-            android:label="@string/title_activity_find_my_phone" >
+            android:label="@string/title_activity_find_my_phone" 
+            android:screenOrientation="portrait"
+            android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

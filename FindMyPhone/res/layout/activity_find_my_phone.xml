@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical" >
 
+    <ScrollView
+        android:id="@+id/scrollback"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal" 
+        android:layout_alignBottom="@+id/scroll">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/login_background"
+        android:layout_alignBottom="@+id/scroll"/>
+
+    </ScrollView>
+
     <requestFocus />
 
     <ScrollView
@@ -31,7 +48,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:text="Please Log In"
-                android:textSize="25dp" />
+                android:textSize="25dp" 
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -43,7 +62,9 @@
                     android:id="@+id/emaltitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email:" />
+                    android:text="Email:" 
+                    android:textStyle="bold"
+                android:textColor="@android:color/black"/>
 
                 <EditText
                     android:id="@+id/email"
@@ -71,7 +92,9 @@
                     android:layout_width="0dp"
                     android:layout_height="40px"
                     android:layout_weight="1"
-                    android:text="Password:" />
+                    android:text="Password:" 
+                    android:textStyle="bold"
+                android:textColor="@android:color/black"/>
 
                 <EditText
                     android:id="@+id/password"
@@ -106,7 +129,9 @@
                 android:layout_marginTop="40px"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="Creat Account" />
+                android:text="Creat Account" 
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
         </LinearLayout>
     </ScrollView>
 

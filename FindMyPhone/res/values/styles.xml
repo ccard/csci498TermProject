@@ -2,5 +2,6 @@
 
     <style name="AppTheme" parent="android:Theme.Black" />
     <style name="MapTheme" parent="android:Theme.Black.NoTitleBar"/>
+    <style name="LoginTheme" parent="android:Theme.Light"/>
 
 </resources>
