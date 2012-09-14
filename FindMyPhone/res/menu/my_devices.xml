@@ -1,6 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add_phone"
         android:title="@string/add_this_phone"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:icon="@drawable/add"
+        android:showAsAction="withText" />
 </menu>

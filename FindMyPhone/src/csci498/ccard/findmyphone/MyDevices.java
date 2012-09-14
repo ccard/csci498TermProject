@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -116,9 +117,7 @@ public class MyDevices extends Activity {
         editor.putString("myfile", current.getName());
         editor.commit();
     }
-    
-   
-    
+  
     
     /**
      * This method initializes all TextViews, ListViews or Buttons that need onclicklisteners
