@@ -2,7 +2,7 @@
 
     <string name="app_name">FindMyPhone</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
+    <string name="add_this_phone">Add phone</string>
     <string name="title_activity_find_my_phone">FindMyPhone</string>
     <string name="title_activity_display_map">Map</string>
     <string name="getLoc">Get Location</string>
