@@ -60,7 +60,7 @@ public class CreatAccount extends Activity
 				dialog.setMessage("You must put in a name for this device");
 				dialog.show();
 			}
-			if (email.getText().equals("")) 
+			else if (email.getText().equals("")) 
 			{
 				dialog.setMessage("You must input an email address");
 				dialog.show();
