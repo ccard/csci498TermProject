@@ -72,8 +72,10 @@ public class DisplayMap extends MapActivity {
 			{
 				int latE6 = (int)(location.getLatitude()*1E6);
 				int lonE6 = (int)(location.getLongitude()*1E6);
-			
+				
 				gpsAccuracy = location.getAccuracy();
+				//send to server
+				
 				//put methods here to allow alternate phone to get this phones location
 				loc = new GeoPoint(latE6,lonE6);
 				mc.animateTo(loc);
