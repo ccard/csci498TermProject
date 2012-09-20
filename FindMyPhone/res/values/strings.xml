@@ -9,4 +9,8 @@
     <string name="title_activity_my_devices">MyDevices</string>
     <string name="title_activity_creat_account">CreatAccount</string>
 
+   
+    <string name="email_ex">bender@futurama.com</string>
+
+
 </resources>

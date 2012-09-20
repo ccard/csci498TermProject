@@ -58,7 +58,7 @@ public class MyDevices extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_devices);
-       
+
         
         
         intent = getIntent();
@@ -118,6 +118,24 @@ public class MyDevices extends Activity {
         editor.commit();
     }
   
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+    	getMenuInflater().inflate(R.menu.my_devices, menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+    	if(item.getItemId() == R.id.add_phone)
+    	{
+    		//add phone info to server here
+    		return true;
+    	}
+    	
+    	return false;
+    }
     
     /**
      * This method initializes all TextViews, ListViews or Buttons that need onclicklisteners

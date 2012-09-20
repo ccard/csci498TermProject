@@ -81,6 +81,7 @@ public final class R {
     public static final class string {
         public static final int add_this_phone=0x7f050002;
         public static final int app_name=0x7f050000;
+        public static final int email_ex=0x7f050008;
         public static final int getLoc=0x7f050005;
         public static final int hello_world=0x7f050001;
         public static final int title_activity_creat_account=0x7f050007;
