@@ -9,8 +9,12 @@
     <string name="title_activity_my_devices">MyDevices</string>
     <string name="title_activity_creat_account">CreatAccount</string>
 
-   
+    <!-- for login page -->
     <string name="email_ex">bender@futurama.com</string>
+
+    <!-- for creat account -->
+    <string name="name_ex">John Hancock</string>
+    <string name="acc_email">fry@planetexpress.inc</string>
 
 
 </resources>

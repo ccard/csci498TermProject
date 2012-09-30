@@ -79,11 +79,17 @@ public final class R {
         public static final int hero=0x7f040000;
     }
     public static final class string {
+        public static final int acc_email=0x7f05000a;
         public static final int add_this_phone=0x7f050002;
         public static final int app_name=0x7f050000;
+        /**  for login page 
+         */
         public static final int email_ex=0x7f050008;
         public static final int getLoc=0x7f050005;
         public static final int hello_world=0x7f050001;
+        /**  for creat account 
+         */
+        public static final int name_ex=0x7f050009;
         public static final int title_activity_creat_account=0x7f050007;
         public static final int title_activity_display_map=0x7f050004;
         public static final int title_activity_find_my_phone=0x7f050003;

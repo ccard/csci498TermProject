@@ -55,7 +55,8 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="textPersonName"
-                        android:singleLine="true" >
+                        android:singleLine="true" 
+                        android:hint="@string/name_ex">
 
                         <requestFocus />
                     </EditText>
@@ -90,7 +91,8 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="textEmailAddress"
-                        android:singleLine="true" />
+                        android:singleLine="true" 
+                        android:hint="@string/acc_email"/>
                 </LinearLayout>
 
             </TableRow>
