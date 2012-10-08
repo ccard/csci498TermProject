@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme">
     <item android:id="@+id/add_phone"
         android:title="@string/add_this_phone"
         android:icon="@drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText" />
+        android:showAsAction="ifRoom|withText" 
+        style="@style/AppTheme"/>
 </menu>

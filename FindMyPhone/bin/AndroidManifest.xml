@@ -47,7 +47,8 @@
         </activity>
         <activity
             android:name=".MyDevices"
-            android:label="@string/title_activity_my_devices" >
+            android:label="@string/title_activity_my_devices"
+            android:theme="@android:style/Theme.Holo" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="csci498.ccard.findmyphone.FindMyPhone" />
