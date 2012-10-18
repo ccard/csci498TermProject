@@ -63,6 +63,13 @@ public class DisplayMap extends MapActivity {
         	mOverlays.add(overlay);
         }
     }
+    
+    @Override
+    public void onStop()
+    {
+    	super.onStop();
+    	locmgr.removeUpdates(onLocChange);
+    }
 
     //this listens for changes for location of the phone inquestion
     private LocationListener onLocChange = new LocationListener(){
