@@ -6,6 +6,6 @@
  */
 package csci498.ccard.findmyphone;
 
-public class ServerQuertHelper {
+public class ServerQueryHelper {
 
 }
