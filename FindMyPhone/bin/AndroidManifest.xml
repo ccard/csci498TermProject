@@ -61,7 +61,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="csci498.ccard.findmyphone.FindMyPhone" />
         </activity>
-        
+        <reciever
+            android:name=".OnBootReciever"
+            android:enabled="false">
+            <intent-filter>
+                
+            </intent-filter>
+        </reciever>
        
        
     </application>
