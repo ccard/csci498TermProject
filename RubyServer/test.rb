@@ -31,7 +31,7 @@ webserver = TCPServer.new 5050
 while session = webserver.accept
 	# session.puts "HELLO"
 	puts "HELLO"
-	#request = session.gets
+	request = session.gets
 	session.print handle_requests(request)
 	session.close
 end
