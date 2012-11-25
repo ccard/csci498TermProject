@@ -1,7 +1,7 @@
 #/usr/bin/env ruby
 
-# #require "sqlite3"
-#require 'json'
+#require "sqlite3"
+require 'json'
 require 'socket'
 
 # JSON: number, name, command, data

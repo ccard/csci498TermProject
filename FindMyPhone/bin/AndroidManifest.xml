@@ -55,7 +55,7 @@
         </activity>
 
          <activity
-            android:name=".CreatAccount"
+            android:name=".CreateAccount"
             android:label="@string/title_activity_creat_account" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
