@@ -176,6 +176,7 @@ public class MyDevices extends Activity {
     //This provides functionality for when the user selects there device
     private OnItemClickListener onPhoneSelect = new OnItemClickListener()
     {
+    	
 		public void onItemClick(AdapterView<?> adapter, View view, int position,
 				long length) 
 		{
@@ -206,7 +207,7 @@ public class MyDevices extends Activity {
 			//send message to the phone
 			if(! current.sendMessage(message.getText().toString()))
 			{
-				dialog.setMessage("Unable to send message to phone "+current.getName());
+				dialog.setMessage("Unable to send message to phone " + current.getName());
 				dialog.show();
 			}
 			

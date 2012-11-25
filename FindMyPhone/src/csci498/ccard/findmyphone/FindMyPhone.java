@@ -61,7 +61,7 @@ public class FindMyPhone extends Activity {
     public void displayCreateAccount(View view)
     {
     	finish();
-    	Intent intent = new Intent (this, CreatAccount.class);
+    	Intent intent = new Intent (this, CreateAccount.class);
     	intent.putExtra(Extra_Message, "Welcome");
     	startActivity(intent);
     }

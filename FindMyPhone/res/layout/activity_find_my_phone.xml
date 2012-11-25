@@ -130,7 +130,7 @@
                 android:layout_marginTop="40px"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="Creat Account" 
+                android:text="Create Account" 
                 android:textStyle="bold"
                 android:textColor="@android:color/black"/>
         </LinearLayout>

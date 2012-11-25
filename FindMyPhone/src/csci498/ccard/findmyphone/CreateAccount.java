@@ -18,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.support.v4.app.NavUtils;
 
-public class CreatAccount extends Activity 
+public class CreateAccount extends Activity 
 {
 	private static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
 
@@ -33,7 +33,7 @@ public class CreatAccount extends Activity
 	public void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.creat_account);
+		setContentView(R.layout.create_account);
 		intent = getIntent();
 		if (intent != null) 
 		{
