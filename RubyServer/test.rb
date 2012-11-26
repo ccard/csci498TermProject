@@ -44,7 +44,7 @@ end
 # Get the ip address of the phone from the database
 def get_ip_address(phone_number)
 	db = SQLite3::Database.open("phones.sqlite")
-	ip_addr = db.execute("SELECT ip_address FROM phone WHERE phone_number = ?", number)[0][0]
+	ip_addr = db.execute("SELECT ip_address FROM phone WHERE phone_number = ?", phone_number)[0][0]
 	db.close
 	return ip_addr	
 end
