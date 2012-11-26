@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
-
     <string name="app_name">FindMyPhone</string>
     <string name="hello_world">Hello world!</string>
     <string name="add_this_phone">Add phone</string>
@@ -7,14 +7,10 @@
     <string name="title_activity_display_map">Map</string>
     <string name="getLoc">Get Location</string>
     <string name="title_activity_my_devices">MyDevices</string>
-    <string name="title_activity_creat_account">CreatAccount</string>
-
+    <string name="title_activity_creat_account">Create Account</string>
     <!-- for login page -->
     <string name="email_ex">bender@futurama.com</string>
-
     <!-- for creat account -->
     <string name="name_ex">John Hancock</string>
     <string name="acc_email">fry@planetexpress.inc</string>
-
-
 </resources>
