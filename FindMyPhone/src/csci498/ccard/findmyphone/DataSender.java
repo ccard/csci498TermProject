@@ -19,13 +19,18 @@ public class DataSender extends AsyncTask<String, Void, String> {
 	@Override
 	protected String doInBackground(String... params) {
 		try {
+			// Open the socket to the server
 			Socket s = new Socket(IP_ADDRESS, TCP_SERVER_PORT);
+			
+			// Create the reader and writer for data from the server
 			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 
+			// Send the first parameter to the server
 			out.write(params[0] + System.getProperty("line.separator"));
 			out.flush();
 
+			// Retrieve the response
 			String returnMessage = in.readLine();
 
 			s.close();

@@ -6,8 +6,7 @@ require 'socket'
 
 webserver = TCPServer.new('138.67.77.103', 5050)
 
-# JSON: number, name, command, data
-# {"data":"Trix","command":"send_message","number":32777,"name":"whats up"}
+# Determines what to do with the request and calls the corresponding function
 def handle_requests(request)
 	puts request
 	data = JSON.parse(request)
@@ -20,18 +19,41 @@ def handle_requests(request)
 	end
 end
 
-def send_message(number, message)
-	db = SQLite3::Database.open("phones.sqlite")
-	ip_addr = db.execute("SELECT ip_address FROM phone WHERE phone_number = ?", number)[0][0]
-	puts ip_addr
-	db.close
-	s = TCPSocket.open(ip_addr, 5050)
-	s.puts message
-	return "SENDING MESSAGE: #{message}"
+# Determines where to send the message and sends it
+def send_message(number, message)	
+	ip_addr = get_ip_address(number)
+	
+	# Create the dictionary with the necessary information
+	data = Hash.new 
+	data['command'] = 'display_message'
+	data['data'] = 'message'
+
+	# Send the message and other information to the phone
+	send_to_phone(ip_addr, data.to_json)
+
+	puts "SENDING MESSAGE: #{message} TO: #{ip_addr}"
+	return ""
 end
 
+# Sends the command to play a tone on the phone
 def play_tone(number, tone)
-	return "PLAYING TONE"
+	puts "PLAYING TONE: #{tone}"
+	return ""
+end
+
+# Get the ip address of the phone from the database
+def get_ip_address(phone_number)
+	db = SQLite3::Database.open("phones.sqlite")
+	ip_addr = db.execute("SELECT ip_address FROM phone WHERE phone_number = ?", number)[0][0]
+	db.close
+	return ip_addr	
+end
+
+# Open a socket to the phone and send the data
+def send_to_phone(ip_addr, data)
+	s = TCPSocket.open(ip_addr, 5050)
+	s.puts data
+	s.close
 end
 
 while session = webserver.accept

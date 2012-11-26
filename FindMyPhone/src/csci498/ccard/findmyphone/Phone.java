@@ -71,6 +71,7 @@ public class Phone {
 		return name;
 	}
 	
+	// Wraps data as a JSON object before sending it to the server
 	private String wrapData(String command, String data) throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("number", number);
