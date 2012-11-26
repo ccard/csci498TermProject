@@ -103,23 +103,21 @@ public class Phone {
 				Socket s = new Socket(IP_ADDRESS, TCP_SERVER_PORT);
 				BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-				String outMsg = "TCP connecting to " + TCP_SERVER_PORT + System.getProperty("line.separator");
 				
 				out.write(params[0] + System.getProperty("line.separator"));
 				out.flush();
 				
 				String returnMessage = in.readLine();
 				
-				Log.i("TcpClient", "sent: " + outMsg);
 				s.close();
-				return returnMessage;
+				if (returnMessage != null)	return returnMessage;
 				
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return null;
+			return "";
 		}
 		
 		@Override
