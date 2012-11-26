@@ -7,11 +7,6 @@ package csci498.ccard.findmyphone;
 
 import java.util.List;
 
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,17 +14,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 
-import com.google.android.maps.*;
-
-import android.view.Menu;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
 
 public class DisplayMap extends MapActivity {
 
-	
-	private LocationManager locmgr = null;
-	
+	private LocationManager locmgr = null;	
 	private GeoPoint loc;
 	private MapController mc;
 	private float gpsAccuracy;
@@ -40,11 +38,9 @@ public class DisplayMap extends MapActivity {
         setContentView(R.layout.activity_display_map);
        
         Intent intent = getIntent();
-        if(intent != null)
-        {
-        	 locmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(intent != null) {
+        	locmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         	locmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, onLocChange);
-        
         
         	MapView map = (MapView)findViewById(R.id.mapview);
         	map.setBuiltInZoomControls(true);
@@ -65,18 +61,16 @@ public class DisplayMap extends MapActivity {
     }
     
     @Override
-    public void onStop()
-    {
+    public void onStop() {
     	super.onStop();
     	locmgr.removeUpdates(onLocChange);
     }
 
     //this listens for changes for location of the phone inquestion
-    private LocationListener onLocChange = new LocationListener(){
+    private LocationListener onLocChange = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
-			if(location != null)
-			{
+			if(location != null) {
 				int latE6 = (int)(location.getLatitude()*1E6);
 				int lonE6 = (int)(location.getLongitude()*1E6);
 				
@@ -90,8 +84,7 @@ public class DisplayMap extends MapActivity {
 		}
 
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub			
 		}
 
 		public void onProviderEnabled(String provider) {
@@ -120,8 +113,7 @@ public class DisplayMap extends MapActivity {
 		private Paint paintBoarder;
 		private Paint fillPaint;
 
-		public MapOverlay()
-		{
+		public MapOverlay() {
 			super();
 
 			paintBoarder = new Paint();
@@ -134,8 +126,7 @@ public class DisplayMap extends MapActivity {
 		}
 
 		//draw method for point and canvas
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when)
-		{
+		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
 			super.draw(canvas, mapView, shadow);
 			
 			Point myScreen = new Point();
@@ -151,4 +142,5 @@ public class DisplayMap extends MapActivity {
 		}
 
 	}
+	
 }

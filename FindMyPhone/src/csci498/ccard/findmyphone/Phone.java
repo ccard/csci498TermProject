@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Phone {
 	
@@ -69,8 +68,7 @@ public class Phone {
 	 * this method sends the instruction to play a tone on the selected device
 	 * @return true if success false other wise
 	 */
-	public boolean sendTone()
-	{
+	public boolean sendTone() {
 		try {
 			new CommandSender().execute(wrapData("play_tone", ""));
 			return true;
@@ -80,8 +78,7 @@ public class Phone {
 		return false;
 	}
 	
-	public String toString()
-	{
+	public String toString() {
 		return name;
 	}
 	
