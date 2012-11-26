@@ -35,7 +35,6 @@ public class DataSender extends AsyncTask<String, Void, String> {
 
 			s.close();
 			if (returnMessage != null)	return returnMessage;
-
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

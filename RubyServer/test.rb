@@ -32,13 +32,13 @@ def send_message(number, message)
 	send_to_phone(ip_addr, data.to_json)
 
 	puts "SENDING MESSAGE: #{message} TO: #{ip_addr}"
-	return ""
+	return "DONE"
 end
 
 # Sends the command to play a tone on the phone
 def play_tone(number, tone)
 	puts "PLAYING TONE: #{tone}"
-	return ""
+	return "DONE"
 end
 
 # Get the ip address of the phone from the database
