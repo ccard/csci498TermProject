@@ -13,8 +13,8 @@ import android.content.Intent;
 public class OnBootReciever extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context arg0, Intent arg1) {
-		// TODO Auto-generated method stub
+	public void onReceive(Context ctxt, Intent intent) {
+		ctxt.startService(new Intent(ctxt, CommandPoller.class));
 	}
 
 }

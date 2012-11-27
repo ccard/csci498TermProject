@@ -26,7 +26,7 @@ def send_message(number, message)
 	# Create the dictionary with the necessary information
 	data = Hash.new 
 	data['command'] = 'display_message'
-	data['data'] = 'message'
+	data['data'] = message
 
 	# Send the message and other information to the phone
 	send_to_phone(ip_addr, data.to_json)
