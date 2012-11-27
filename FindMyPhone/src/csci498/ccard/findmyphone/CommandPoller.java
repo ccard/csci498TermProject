@@ -2,6 +2,7 @@ package csci498.ccard.findmyphone;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
@@ -14,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class CommandPoller extends IntentService {
 	
@@ -22,9 +22,14 @@ public class CommandPoller extends IntentService {
 	
 	public CommandPoller() {
 		super("CommandPoller");
-		// TODO Auto-generated constructor stub
+		try {
+			ssocket = new ServerSocket(5050);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.e("CommandPoller", null, e);
+		}
 	}
-	
+
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		getAndExecuteCommand();
@@ -34,7 +39,6 @@ public class CommandPoller extends IntentService {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		while (connectivityManager.getActiveNetworkInfo().isConnected()) {
 			try {
-				ssocket = new ServerSocket(5050);
 				Socket s = ssocket.accept();
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -53,7 +57,6 @@ public class CommandPoller extends IntentService {
 				out.flush();
 				out.close();
 				s.close();
-				ssocket.close();
 			} catch (Exception e) {
 				Log.e("ConnectionError", null, e);
 			}
