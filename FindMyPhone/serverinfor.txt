@@ -1,0 +1,34 @@
+Create account
+send email
+password hash
+phone name
+current ip_address
+settings.secure for static address
+
+
+Phone list:
+get list of phones from server and load into list
+be able to add phone to the list
+send message to the selected phone
+get location of this phone and selected phone from server
+send tone to phone
+
+remove phone from list
+
+
+Serveices:
+send recieve from server
+send receive from phone to phone
+
+keep network alive
+check server or incoming connection periodically
+
+try and get boot receiver working
+
+
+
+
+
+ALL:
+need conforamtion of sent and recieved commands
+need appropriate user feed back based on server status
