@@ -75,7 +75,6 @@ public class DisplayMap extends MapActivity {
 				int lonE6 = (int)(location.getLongitude()*1E6);
 				
 				gpsAccuracy = location.getAccuracy();
-				//send to server
 				
 				//put methods here to allow alternate phone to get this phones location
 				loc = new GeoPoint(latE6,lonE6);
