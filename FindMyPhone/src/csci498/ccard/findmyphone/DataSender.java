@@ -11,42 +11,76 @@ import java.net.UnknownHostException;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class DataSender extends AsyncTask<String, Void, String> {
-
-	private static final String IP_ADDRESS = "138.67.77.103";
-	private static final int TCP_SERVER_PORT = 5050;
-
-	@Override
-	protected String doInBackground(String... params) {
-		try {
-			// Open the socket to the server
-			Socket s = new Socket(IP_ADDRESS, TCP_SERVER_PORT);
-			
-			// Create the reader and writer for data from the server
-			BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
-
-			// Send the first parameter to the server
-			out.write(params[0] + System.getProperty("line.separator"));
-			out.flush();
-
-			// Retrieve the response
-			String returnMessage = in.readLine();
-
-			s.close();
-			if (returnMessage != null)	return returnMessage;
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
-
-	@Override
-	protected void onPostExecute(String objResult) {
-		// TODO: Do something with the result
-		Log.i("MSG: ", objResult);
+public class DataSender {
+	
+	public static final String SERVER_ADDRESS = "138.67.77.103";
+	private String lastResult;	
+	
+	public DataSender() {
+		// No-op
 	}
 	
+	/**
+	 * Sends a JSON string to the server
+	 * @param jsonData data encoded as a string using JSON
+	 */
+	public void sendToServer(String jsonData) {
+		lastResult = "";
+		new SenderTask().execute(SERVER_ADDRESS, jsonData);
+	}
+	
+	/**
+	 * Sends a JSON string to a particular phone
+	 * @param ipAddress the ip address of the phone
+	 * @param jsonData data encoded as a string using JSON
+	 */
+	public void sendToPhone(String ipAddress, String jsonData) {
+		lastResult = "";
+		new SenderTask().execute(ipAddress, jsonData);
+	}
+	
+	public String getLastResult() {
+		return lastResult;
+	}
+
+	private class SenderTask extends AsyncTask<String, Void, String> {
+
+		private static final int TCP_SERVER_PORT = 5050;
+
+		@Override
+		protected String doInBackground(String... params) {
+			try {
+				String ipAddress = params[0];
+				// Open the socket to the server
+				Socket s = new Socket(ipAddress, TCP_SERVER_PORT);
+
+				// Create the reader and writer for data from the server
+				BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+
+				// Send the first parameter to the server
+				out.write(params[1] + System.getProperty("line.separator"));
+				out.flush();
+
+				// Retrieve the response
+				String returnMessage = in.readLine();
+
+				s.close();
+				if (returnMessage != null)	return returnMessage;
+			} catch (UnknownHostException e) {
+				Log.e("SenderTask", null, e);
+			} catch (IOException e) {
+				Log.e("SenderTask", null, e);
+			}
+			return "";
+		}
+
+		@Override
+		protected void onPostExecute(String objResult) {
+			Log.i("MSG: ", objResult);
+			lastResult = objResult;
+		}
+		
+	}
+
 }

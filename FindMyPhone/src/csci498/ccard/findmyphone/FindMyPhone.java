@@ -29,7 +29,7 @@ public class FindMyPhone extends Activity {
         TextView create = (TextView)findViewById(R.id.createAccount);
         create.setOnClickListener(onCreateAccount);
         
-        startService(new Intent(this, CommandPoller.class));
+        startService(new Intent(this, CommandPollerService.class));
     }
 
     //provides functionality to allow the login button to login to server to verify that

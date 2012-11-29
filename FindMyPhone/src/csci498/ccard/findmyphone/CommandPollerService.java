@@ -15,12 +15,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.widget.Toast;
 
-public class CommandPoller extends IntentService {
+public class CommandPollerService extends IntentService {
 	
 	private ServerSocket ssocket;
 	
-	public CommandPoller() {
+	public CommandPollerService() {
 		super("CommandPoller");
 		try {
 			ssocket = new ServerSocket(5050);
@@ -51,7 +52,11 @@ public class CommandPoller extends IntentService {
 				// TODO: Do whatever to execute the command
 
 				Log.i("COMMAND", "command is " + command + " data is " + data);
-				out.write("command is " + command + " data is " + data + System.getProperty("line.separator"));
+				JSONObject temp = new JSONObject();
+				temp.put("comm", command);
+				temp.put("dat", data);
+				Toast.makeText(this, temp.toString(), Toast.LENGTH_LONG).show();
+				out.write(temp.toString());
 				
 				
 				out.flush();

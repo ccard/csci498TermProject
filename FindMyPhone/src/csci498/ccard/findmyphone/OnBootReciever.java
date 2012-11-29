@@ -14,7 +14,7 @@ public class OnBootReciever extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context ctxt, Intent intent) {
-		ctxt.startService(new Intent(ctxt, CommandPoller.class));
+		ctxt.startService(new Intent(ctxt, CommandPollerService.class));
 	}
 
 }

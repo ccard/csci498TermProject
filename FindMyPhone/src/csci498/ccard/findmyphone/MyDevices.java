@@ -39,9 +39,9 @@ public class MyDevices extends Activity {
 	private TextView phoneName;
 	private EditText message;
 	private Intent intent;
-	private List<Phone> myPhones;
-	private Phone current;
-	private ArrayAdapter<Phone> phoneAddapter;	
+	private List<PhoneManager> myPhones;
+	private PhoneManager current;
+	private ArrayAdapter<PhoneManager> phoneAddapter;	
 	private Builder dialog;
 
 	@Override
@@ -53,7 +53,7 @@ public class MyDevices extends Activity {
 		//checks to see if this was started by an intent
 		if(intent != null) {
 			//populate phone list from servers here
-			myPhones = new ArrayList<Phone>();//replace this with what ever method populates the phone list from servers
+			myPhones = new ArrayList<PhoneManager>();//replace this with what ever method populates the phone list from servers
 
 			//stores the list of phones so it can populate the listview with out having to keep
 			//refering to the list view
@@ -63,24 +63,25 @@ public class MyDevices extends Activity {
 			list.setAdapter(phoneAddapter);
 			list.setOnItemClickListener(onPhoneSelect);
 			//replace this with blocks gotten from the server
-			current = new Phone();
+			Phone temp = new Phone();
 			if(intent.getStringExtra(FindMyPhone.Extra_Message) != null) {
-				current.setName(intent.getStringExtra(FindMyPhone.Extra_Message).toString());
+				temp.setName(intent.getStringExtra(FindMyPhone.Extra_Message).toString());
 			}
 			else {
-				current.setName(getSharedPreferences("myfile",MODE_PRIVATE).getString("myfile", ""));
+				temp.setName(getSharedPreferences("myfile",MODE_PRIVATE).getString("myfile", ""));
 				getSharedPreferences("myfile",MODE_PRIVATE).edit().remove("myfile").commit();
 			}
 
-			current.setNumber(000000100011);
-			current.setPhonetype("Smart Phone");
+			temp.setNumber(000000100011);
+			temp.setPhonetype("Smart Phone");
+			current = new PhoneManager(temp);
 			phoneAddapter.add(current);
 			//end of phone list population from severs
 
 			//initializes all the values to be used else where in code
-			flip = (ViewFlipper)findViewById(R.id.viewFlipperMyDevice);
-			phoneName = (TextView)findViewById(R.id.phonename);
-			message = (EditText)findViewById(R.id.message);
+			flip = (ViewFlipper) findViewById(R.id.viewFlipperMyDevice);
+			phoneName = (TextView) findViewById(R.id.phonename);
+			message = (EditText) findViewById(R.id.message);
 
 			//initalizes all fields that need onclicklisteneres or onitemclick listeners
 			initOnClicks();
@@ -92,8 +93,8 @@ public class MyDevices extends Activity {
 		super.onStop();
 		SharedPreferences finalSettings = getSharedPreferences("myfile", MODE_PRIVATE);
 		SharedPreferences.Editor editor = finalSettings.edit();
-		editor.putString("myfile",current.getName());
-		editor.putString("myfile", current.getName());
+		editor.putString("myfile", current.getPhone().getName());
+		editor.putString("myfile", current.getPhone().getName());
 		editor.commit();
 	}
 
@@ -154,7 +155,7 @@ public class MyDevices extends Activity {
 				long length)  {
 			current = myPhones.get(position);
 
-			phoneName.setText(current.getName());
+			phoneName.setText(current.getPhone().getName());
 			flip.showNext();
 		}
 
@@ -176,7 +177,7 @@ public class MyDevices extends Activity {
 		public void onClick(View v) {
 			//send message to the phone
 			if(! current.sendMessage(message.getText().toString())) {
-				dialog.setMessage("Unable to send message to phone " + current.getName());
+				dialog.setMessage("Unable to send message to phone " + current.getPhone().getName());
 				dialog.show();
 			}
 
@@ -222,7 +223,7 @@ public class MyDevices extends Activity {
 	 * @author Chris
 	 *
 	 */
-	class PhoneAdapter extends ArrayAdapter<Phone>{
+	class PhoneAdapter extends ArrayAdapter<PhoneManager> {
 
 		PhoneAdapter() {
 			super(MyDevices.this, android.R.layout.simple_list_item_1, myPhones);
@@ -230,17 +231,17 @@ public class MyDevices extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View row = convertView;
-			PhoneHolder holder = null;
+			PhoneMangerHolder holder = null;
 
 			if(row == null) {
 				LayoutInflater inflater = getLayoutInflater();
 
 				row = inflater.inflate(R.layout.phone_view, null);
-				holder = new PhoneHolder(row);
+				holder = new PhoneMangerHolder(row);
 				row.setTag(holder);
 			}
 			else {
-				holder = (PhoneHolder)row.getTag();
+				holder = (PhoneMangerHolder)row.getTag();
 			}
 
 			holder.populateForm(myPhones.get(position));
@@ -255,20 +256,19 @@ public class MyDevices extends Activity {
 	 * @author Chris
 	 *
 	 */
-	static class PhoneHolder {
+	static class PhoneMangerHolder {
 
 		private TextView name = null;
 		private TextView type = null;
 
-		PhoneHolder(View row) {
+		PhoneMangerHolder(View row) {
 			name = (TextView)row.findViewById(R.id.phoneName);
 			type = (TextView)row.findViewById(R.id.phoneType);
 		}
 
-		void populateForm(Phone p) {
-			name.setText(p.getName());
-			type.setText(p.getPhonetype());
-
+		void populateForm(PhoneManager p) {
+			name.setText(p.getPhone().getName());
+			type.setText(p.getPhone().getPhonetype());
 		}
 		
 	}

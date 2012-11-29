@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:debuggable="true"
@@ -64,17 +65,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="csci498.ccard.findmyphone.FindMyPhone" />
         </activity>
-
-        <service android:name=".CommandListener" />
-        <service android:name=".CommandPoller" />
-
-        <reciever android:name=".OnBootReciever" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </reciever>
+        <receiver android:permission="android.permission.RECEIVE_BOOT_COMPLETED" android:name="OnBootReciever"></receiver>
+        <service android:name="CommandPollerService"></service>
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
