@@ -5,11 +5,15 @@
  */
 package csci498.ccard.findmyphone;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -70,11 +74,28 @@ public class CreateAccount extends Activity {
 				password.setText("");
 				passwordConfirm.setText("");
 			}
-			else {
+			else {				
 				Phone phone = new Phone();
 				phone.setName(name.getText().toString());
-				// credential and phone info pass to server here
-				showMyDevices(phone);
+				// Add stuff for this phone here
+				
+				JSONObject jsonData = phone.toJSON();					
+				// add stuff for account here
+				try {
+					jsonData.put("command", "create_account");
+					jsonData.put("email", email.getText().toString());
+					jsonData.put("password_hash", password.getText().toString());
+				} catch (JSONException e) {
+					Log.e("CreateAccount", null, e);
+				}				
+				
+				DataSender.getInstance().sendToServer(jsonData.toString());
+//				while (DataSender.getInstance().getLastResult() == "") {}
+//				if (DataSender.getInstance().getLastResult() == "DONE") {
+					showMyDevices(phone);
+//				} else {
+//					Log.e("CreateAccount", "ERROR CREATING ACCOUNT");
+//				}
 			}
 		}
 		

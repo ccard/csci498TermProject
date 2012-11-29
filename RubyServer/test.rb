@@ -11,7 +11,7 @@ ADD_PHONE_STATEMENT = "INSERT INTO phone(name, ip_address, last_lattitude, last_
 REMOVE_PHONE_STATEMENT = "DELETE FROM phone WHERE id_unique=?"
 ADD_USER_STATEMENT = "INSERT INTO user(email, password_hash) VALUES (?, ?)"
 GET_ALL_PHONES = "SELECT * FROM phone WHERE user_id=?"
-COLUMN_NAMES = ('id', 'name', 'ip_address', 'last_lattitude', 'last_longitude', 'id_unique', 'user_id', 'phone_type_id')
+COLUMN_NAMES = ['id', 'name', 'ip_address', 'last_lattitude', 'last_longitude', 'id_unique', 'user_id', 'phone_type_id']
 
 
 # Determines what to do with the request and calls the corresponding function
@@ -51,7 +51,8 @@ def create_account(data)
 	db = SQLite3::Database.open("phones.sqlite")
 	db.execute(ADD_USER_STATEMENT, data['email'], data['password_hash'])
 	db.close
-	return add_phone(data)
+	return "DONE"
+	# return add_phone(data)
 end
 
 def login(data)

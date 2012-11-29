@@ -15,9 +15,15 @@ public class DataSender {
 	
 	public static final String SERVER_ADDRESS = "138.67.77.103";
 	private String lastResult;	
+	private static DataSender ds = new DataSender();
 	
-	public DataSender() {
+	// Singleton Pattern
+	private DataSender() {
 		// No-op
+	}
+	
+	public static DataSender getInstance() {
+		return ds;
 	}
 	
 	/**
