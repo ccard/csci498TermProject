@@ -51,7 +51,7 @@ public class CommandPollerService extends IntentService {
 				
 				// TODO: Do whatever to execute the command
 
-				Log.i("COMMAND", "command is " + command + " data is " + data);
+				Log.i("COMMAND", "RECEIVED MESSAGE: command is " + command + " data is " + data);
 				JSONObject temp = new JSONObject();
 				temp.put("comm", command);
 				temp.put("dat", data);

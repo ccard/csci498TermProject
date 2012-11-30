@@ -14,8 +14,8 @@ public class Phone {
 	private String name;
 	private String phonetype;	
 	private String ipAddress;
-	private String lastLattitude;
-	private String lastLongitude;
+	private double lastLattitude;
+	private double lastLongitude;
 	private String uniqueID;
 	
 	public Phone() {
@@ -27,8 +27,8 @@ public class Phone {
 			name = json.getString("name");
 			phonetype = json.getString("phone_type");
 			ipAddress = json.getString("ip_address");
-			lastLattitude = json.getString("last_lattitude");
-			lastLongitude = json.getString("last_longitude");
+			lastLattitude = json.getDouble("last_lattitude");
+			lastLongitude = json.getDouble("last_longitude");
 			uniqueID = json.getString("id_unique");
 		} catch (JSONException e) {
 			Log.e("Phone", null, e);
@@ -82,19 +82,19 @@ public class Phone {
 		this.ipAddress = ipAddress;
 	}
 	
-	public String getLastLattitude() {
+	public double getLastLattitude() {
 		return lastLattitude;
 	}
 	
-	public void setLastLattitude(String lastLattitude) {
+	public void setLastLattitude(double lastLattitude) {
 		this.lastLattitude = lastLattitude;
 	}
 	
-	public String getLastLongitude() {
+	public double getLastLongitude() {
 		return lastLongitude;
 	}
 	
-	public void setLastLongitude(String lastLongitude) {
+	public void setLastLongitude(double lastLongitude) {
 		this.lastLongitude = lastLongitude;
 	}
 	

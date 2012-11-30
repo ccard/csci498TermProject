@@ -51,8 +51,8 @@ def create_account(data)
 	db = SQLite3::Database.open("phones.sqlite")
 	db.execute(ADD_USER_STATEMENT, data['email'], data['password_hash'])
 	db.close
-	return "DONE"
-	# return add_phone(data)
+	# return "DONE"
+	return add_phone(data)
 end
 
 def login(data)
@@ -75,23 +75,6 @@ def login(data)
 		return "ERROR"
 	end
 end
-
-
-# Determines where to send the message and sends it
-# def send_message(number, message)	
-# 	ip_addr = get_ip_address(number)
-	
-# 	# Create the dictionary with the necessary information
-# 	data = Hash.new 
-# 	data['command'] = 'display_message'
-# 	data['data'] = message
-
-# 	# Send the message and other information to the phone
-# 	send_to_phone(ip_addr, data.to_json)
-
-# 	puts "SENDING MESSAGE: #{message} TO: #{ip_addr}"
-# 	return "DONE"
-# end
 
 # Get the ip address of the phone from the database
 def get_ip_address(id_unique)

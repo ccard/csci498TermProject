@@ -5,6 +5,12 @@
  */
 package csci498.ccard.findmyphone;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,7 +18,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +39,8 @@ public class CreateAccount extends Activity {
 	private EditText passwordConfirm;
 	private Builder dialog;
 	private Intent intent;
+	private LocationManager locMgr;
+	private Phone currentPhone;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +59,9 @@ public class CreateAccount extends Activity {
 			Button login = (Button) findViewById(R.id.createNewAccount);
 			login.setOnClickListener(createNewAccount);
 		}
+		currentPhone = new Phone();
+		locMgr = (LocationManager) getSystemService(LOCATION_SERVICE);
+		setPhoneLocation();
 	}
 
 	// This verify the user put in the required info and sends it to the server
@@ -75,11 +91,10 @@ public class CreateAccount extends Activity {
 				passwordConfirm.setText("");
 			}
 			else {				
-				Phone phone = new Phone();
-				phone.setName(name.getText().toString());
+				setUpPhoneData();
 				// Add stuff for this phone here
 				
-				JSONObject jsonData = phone.toJSON();					
+				JSONObject jsonData = currentPhone.toJSON();					
 				// add stuff for account here
 				try {
 					jsonData.put("command", "create_account");
@@ -92,7 +107,7 @@ public class CreateAccount extends Activity {
 				DataSender.getInstance().sendToServer(jsonData.toString());
 //				while (DataSender.getInstance().getLastResult() == "") {}
 //				if (DataSender.getInstance().getLastResult() == "DONE") {
-					showMyDevices(phone);
+					showMyDevices(currentPhone);
 //				} else {
 //					Log.e("CreateAccount", "ERROR CREATING ACCOUNT");
 //				}
@@ -101,6 +116,71 @@ public class CreateAccount extends Activity {
 		
 	};
 
+	// TODO: Maybe these functions should be somewhere else		
+	private void setUpPhoneData() {
+		currentPhone.setName(name.getText().toString());
+		currentPhone.setIpAddress(getIpAddress());			
+//		currentPhone.setNumber(number);
+		currentPhone.setPhonetype("Smart Phone");
+		currentPhone.setUniqueID(Secure.getString(getContentResolver(), Secure.ANDROID_ID));			
+	}
+
+	public String getIpAddress() {
+		InetAddress iA;
+		try {
+			iA = InetAddress.getLocalHost();
+			return iA.getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			Log.e("CreateAccount", null, e);
+		}
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						String ip = Formatter.formatIpAddress(inetAddress.hashCode());
+						Log.i("CreateAccount", "***** IP="+ ip);
+						return ip;
+					}
+				}
+			}
+		} catch (SocketException e) {
+			Log.e("CreateAccount", null, e);
+		}
+		return null;
+	}
+
+	public void setPhoneLocation() {
+		locMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, onLocationChange);
+	}
+	
+	private LocationListener onLocationChange = new LocationListener() {
+		
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// None
+			
+		}
+		
+		public void onProviderEnabled(String provider) {
+			// None
+			
+		}
+		
+		public void onProviderDisabled(String provider) {
+			// None
+			
+		}
+		
+		public void onLocationChanged(Location location) {
+			currentPhone.setLastLattitude(location.getLatitude()); 
+			currentPhone.setLastLongitude(location.getLongitude());
+			locMgr.removeUpdates(onLocationChange);
+		}
+
+	};
+	
 	/**
 	 * This method finishes this activity and starts the my devices activity
 	 */
