@@ -60,7 +60,8 @@ public class FunctionsService extends Service {
 	
 	/**
 	 * This stops the location listener
-	 * @note if startLocationListener is called then this should be called when location is no longer
+	 * Note:
+	 * if startLocationListener is called then this should be called when location is no longer
 	 * need or risk running the device battery down 
 	 */
 	public void stopLocationListener()
