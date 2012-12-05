@@ -14,7 +14,7 @@ import android.util.Log;
 public class DataSender {
 	
 	public static final String SERVER_ADDRESS = "138.67.77.103";
-	private String lastResult;	
+	private static String lastResult = "";	
 	private static DataSender ds = new DataSender();
 	
 	// Singleton Pattern
@@ -72,7 +72,10 @@ public class DataSender {
 				String returnMessage = in.readLine();
 
 				s.close();
-				if (returnMessage != null)	return returnMessage;
+				if (returnMessage != null)	{
+					lastResult = returnMessage;
+					return returnMessage;
+				}
 			} catch (UnknownHostException e) {
 				Log.e("SenderTask", null, e);
 			} catch (IOException e) {

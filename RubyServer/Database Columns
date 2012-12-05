@@ -1,0 +1,22 @@
+phone:
+id 						INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+name 					TEXT NOT NULL			
+ip_address				TEXT NOT NULL
+last_lattitude			TEXT
+last_longitude 			TEXT
+id_unique				TEXT NOT NULL UNIQUE
+user_id					INTEGER NOT NULL
+phone_type_id			INTEGER NOT NULL
+FOREIGN KEY(user_id) REFERENCES user(id)
+FOREIGN KEY(phone_type_id) REFERENCES phone_type(id)
+
+phone_type:
+id						INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+name					TEXT NOT NULL
+
+user:
+id 						INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+email					TEXT NOT NULL UNIQUE
+password_hash			TEXT NOT NULL
+
+:

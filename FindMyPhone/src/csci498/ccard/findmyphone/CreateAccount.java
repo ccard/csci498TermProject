@@ -8,9 +8,9 @@ package csci498.ccard.findmyphone;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import org.apache.http.conn.util.InetAddressUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +23,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +31,8 @@ import android.widget.EditText;
 
 public class CreateAccount extends Activity {
 	
+	private static final String LOG_TAG = "CreateAccount";
+	private static final String DONE = "DONE";
 	private static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
 	private EditText name;
 	private EditText email;
@@ -68,6 +69,7 @@ public class CreateAccount extends Activity {
 	private OnClickListener createNewAccount = new OnClickListener() {
 		
 		public void onClick(View view) {
+			// TODO: Extract into input validation function
 			if(name.getText().toString().equals("")) {
 				dialog.setMessage("You must put in a name for this device");
 				dialog.show();
@@ -101,16 +103,28 @@ public class CreateAccount extends Activity {
 					jsonData.put("email", email.getText().toString());
 					jsonData.put("password_hash", password.getText().toString());
 				} catch (JSONException e) {
-					Log.e("CreateAccount", null, e);
+					Log.e(LOG_TAG, null, e);
 				}				
 				
 				DataSender.getInstance().sendToServer(jsonData.toString());
-//				while (DataSender.getInstance().getLastResult() == "") {}
-//				if (DataSender.getInstance().getLastResult() == "DONE") {
+				int i = 0;
+				while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 5)) {
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						Log.e(LOG_TAG, null, e);
+					}
+				}
+				if (DONE.equals(DataSender.getInstance().getLastResult())) {
 					showMyDevices(currentPhone);
-//				} else {
-//					Log.e("CreateAccount", "ERROR CREATING ACCOUNT");
-//				}
+				} else if ("ERROR".equals(DataSender.getInstance().getLastResult())) {
+					dialog.setMessage("That email address is already registered");
+					dialog.show();
+					Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
+				} else {
+					dialog.setMessage("An unspecified error has occured");
+					dialog.show();
+				}
 			}
 		}
 		
@@ -126,29 +140,22 @@ public class CreateAccount extends Activity {
 	}
 
 	public String getIpAddress() {
-		InetAddress iA;
-		try {
-			iA = InetAddress.getLocalHost();
-			return iA.getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			Log.e("CreateAccount", null, e);
-		}
+		System.setProperty("java.net.preferIPv4Stack" , "true");
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = en.nextElement();
 				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
 					InetAddress inetAddress = enumIpAddr.nextElement();
-					if (!inetAddress.isLoopbackAddress()) {
-						String ip = Formatter.formatIpAddress(inetAddress.hashCode());
-						Log.i("CreateAccount", "***** IP="+ ip);
+					if (!inetAddress.isLoopbackAddress() && InetAddressUtils.isIPv4Address(inetAddress.getHostAddress())) {
+						String ip = inetAddress.getHostAddress();
+						Log.i(LOG_TAG, "***** IP="+ ip);
 						return ip;
 					}
 				}
 			}
 		} catch (SocketException e) {
-			Log.e("CreateAccount", null, e);
-		}
+			Log.e(LOG_TAG, null, e);
+		} 
 		return null;
 	}
 
