@@ -122,7 +122,7 @@ public class CreateAccount extends Activity {
 					dialog.show();
 					Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
 				} else {
-					dialog.setMessage("An unspecified error has occured");
+					dialog.setMessage("Could not connect to server");
 					dialog.show();
 				}
 			}
@@ -140,7 +140,6 @@ public class CreateAccount extends Activity {
 	}
 
 	public String getIpAddress() {
-		System.setProperty("java.net.preferIPv4Stack" , "true");
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = en.nextElement();
