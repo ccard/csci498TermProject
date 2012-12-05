@@ -79,6 +79,9 @@ public class FunctionsService extends Service {
 	}
 	
 	
+	//Gurpreet put the methods you want here look at top for link on how to use the binded service
+	
+	
 	private LocationListener loclis = new LocationListener(){
 
 		public void onLocationChanged(Location loc) {
