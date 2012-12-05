@@ -33,40 +33,31 @@ def handle_requests(request)
 end
 
 def add_phone(data)
-	# $db = SQLite3::Database.open("phones.sqlite")
 	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'], data['password_hash'])[0][0]
 	phone_type_id = $db.execute(GET_PHONE_TYPE_ID_STATEMENT, data['phone_type'])[0][0]
 	$db.execute(ADD_PHONE_STATEMENT, data['name'], data['ip_address'], data['last_lattitude'], data['last_longitude'], data['id_unique'], user_id, phone_type_id)
-	# $db.close
 	return "DONE"
 end
 
 def remove_phone(data)
-	# $db = SQLite3::Database.open("phones.sqlite")
 	$db.execute(REMOVE_PHONE_STATEMENT, data['id_unique'])	
-	# $db.close
 	return "DONE"
 end
 
 def create_account(data)
-	# $db = SQLite3::Database.open("phones.sqlite")
 	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
 	if Integer(user_exists) != 0
 		puts user_exists
 		return "ERROR"
 	end
 	$db.execute(ADD_USER_STATEMENT, data['email'], data['password_hash'])
-	# $db.close
-	# return "DONE"
 	return add_phone(data)
 end
 
 def login(data)
-	# $db = SQLite3::Database.open("phones.sqlite")
 	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'], data['password_hash'])[0][0]
 	if user_id
 		phones = $db.execute(GET_ALL_PHONES, user_id)
-		# $db.close
 		phones_hash = Hash.new
 		phones.each do |phone|
 			phone_hash = Hash.new
@@ -77,16 +68,13 @@ def login(data)
 		end
 		return phones_hash.to_json
 	else
-		# $db.close
 		return "ERROR"
 	end
 end
 
 # Get the ip address of the phone from the database
 def get_ip_address(id_unique)
-	# $db = SQLite3::Database.open("phones.sqlite")
 	ip_addr = $db.execute("SELECT ip_address FROM phone WHERE id_unique = ?", id_unique)[0][0]
-	# $db.close
 	return ip_addr	
 end
 
@@ -97,10 +85,14 @@ def send_to_phone(ip_addr, data)
 	s.close
 end
 
-while session = webserver.accept
-	# session.puts "HELLO"
-	request = session.gets
-	session.print handle_requests(request)
-	session.close
+begin
+	while session = webserver.accept
+		# session.puts "HELLO"
+		request = session.gets
+		session.print handle_requests(request)
+		session.close
+	end
+rescue Exception => e
+	$db.close
 end
-$db.close
+
