@@ -5,32 +5,48 @@
  */
 package csci498.ccard.findmyphone;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class DisplayMap extends MapActivity {
 
 	private LocationManager locmgr = null;	
 	private GeoPoint loc;
 	private MapController mc;
+	private Overlay items;
 	private float gpsAccuracy;
+	private Phone otherPhone;
+	private GetOther other;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +60,29 @@ public class DisplayMap extends MapActivity {
         
         	MapView map = (MapView)findViewById(R.id.mapview);
         	map.setBuiltInZoomControls(true);
-        	//getlocation from intent from ohther phone here
+        	JSONObject details;
+        	try {
+				details = new JSONObject(intent.getStringExtra(FindMyPhone.Extra_Message));
+				otherPhone = new Phone(details);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Log.e("DisplayMap", e.toString());
+				
+				new Builder(this).setTitle("Error")
+								 .setMessage("Error while trying to load the selected phone onto the map")
+								 .setNegativeButton("Ok", new OnClickListener(){
+
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										onDestroy();
+									}
+									 
+								 })
+								 .create().show();
+			}
         	
         	//initailizes overlays for drop pins to show the phones location
-        	List<Overlay> mOverlays = map.getOverlays();
+        	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
         	mc = map.getController();
         	int lat = (int)(39.755543*1E6);
         	int lon = (int)(-105.2210997*1E6);
@@ -55,15 +90,22 @@ public class DisplayMap extends MapActivity {
         	mc.setCenter(loc);
         	mc.setZoom(14);
         	gpsAccuracy = (float) 6.0;
-        	MapOverlay overlay = new MapOverlay();
-        	mOverlays.add(overlay);
+        	items.addOverlay(new OverlayItem(loc,"Me",""));
+        	items.addOverlay(new OverlayItem(new GeoPoint((int)otherPhone.getLastLattitude(), (int)otherPhone.getLastLongitude()), otherPhone.getName(),""));
+        	map.getOverlays().add(items);
+        	other = new GetOther();
+        	other.execute(otherPhone.getIpAddress());
         }
     }
     
     @Override
-    public void onStop() {
-    	super.onStop();
+    public void onDestroy() {
+    	super.onDestroy();
     	locmgr.removeUpdates(onLocChange);
+    	if(other.getStatus() == AsyncTask.Status.RUNNING)
+    	{
+    		other.cancel(true);
+    	}
     }
 
     //this listens for changes for location of the phone inquestion
@@ -78,7 +120,8 @@ public class DisplayMap extends MapActivity {
 				
 				//put methods here to allow alternate phone to get this phones location
 				loc = new GeoPoint(latE6,lonE6);
-				mc.animateTo(loc);
+				OverlayItem temp = items.getItem(0);
+				items.updateItem(0, new OverlayItem(loc,temp.getTitle(),temp.getSnippet()));
 			}
 		}
 
@@ -101,45 +144,69 @@ public class DisplayMap extends MapActivity {
 		// TODO Auto-generated method stub
 		return false;
 	}
+    
+    private class Overlay extends ItemizedOverlay<OverlayItem>
+    {
+    	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+		public Overlay(Drawable icon) {
+			super(icon);
+			// TODO Auto-generated constructor stub
+		}
+		
+		public void addOverlay(OverlayItem overlay)
+		{
+			mOverlays.add(overlay);
+			populate();
+		}
+		
+		public void updateItem(int item, OverlayItem overlay)
+		{
+			mOverlays.remove(item);
+			mOverlays.add(item, overlay);
+			populate();
+		}
+
+		@Override
+		protected OverlayItem createItem(int position) {
+			return mOverlays.get(position);
+		}
+
+		@Override
+		public int size() {
+			// TODO Auto-generated method stub
+			return mOverlays.size();
+		}
+    	
+    }
 	
-    /**
-     * This class allows the overlay droppins to be drawn and shown on the map view
-     * @author Chris card
-     *
-     */
-	public class MapOverlay extends Overlay {
+    private class GetOther extends AsyncTask<String, String, String>
+    {
 
-		private Paint paintBoarder;
-		private Paint fillPaint;
-
-		public MapOverlay() {
-			super();
-
-			paintBoarder = new Paint();
-			paintBoarder.setStyle(Paint.Style.STROKE);
-			paintBoarder.setAntiAlias(true);
-			paintBoarder.setColor(0xee4D2EFF);
-			fillPaint = new Paint();
-			fillPaint.setStyle(Paint.Style.FILL);
-			fillPaint.setColor(0x154D2Eff);
-		}
-
-		//draw method for point and canvas
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
-			super.draw(canvas, mapView, shadow);
+		@Override
+		protected String doInBackground(String... params) {
+			//passed in string is the ip address;
+			String ip = params[0];
 			
-			Point myScreen = new Point();
-			mapView.getProjection().toPixels(loc, myScreen);
-			Bitmap marker = BitmapFactory.decodeResource(getResources(), R.drawable.droppin);
-			canvas.drawBitmap(marker, myScreen.x-20, myScreen.y-45,null);
-
-			int radius = (int)mapView.getProjection().metersToEquatorPixels(gpsAccuracy);
-
-			canvas.drawCircle(myScreen.x, myScreen.y, radius, paintBoarder);
-			canvas.drawCircle(myScreen.x, myScreen.y, radius, fillPaint);
-			return true;
+			//run comunications code here
+			//update the gui once it gets a message of the location
+			//pass in location in the format Latitud:Longitude
+			publishProgress("");
+			
+			return null;
 		}
-
-	}
+		
+		protected void onProgressUpdate(String location)
+		{
+			String words[] = location.split(":");
+			int lat = Integer.parseInt(words[0]);
+			int lon = Integer.parseInt(words[1]);
+			
+			GeoPoint p = new GeoPoint(lat,lon);
+			
+			OverlayItem temp = items.getItem(0);
+			items.updateItem(0, new OverlayItem(loc,temp.getTitle(),temp.getSnippet()));
+		}
+    	
+    }
 	
 }

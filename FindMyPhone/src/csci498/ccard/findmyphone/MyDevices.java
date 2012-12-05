@@ -214,7 +214,7 @@ public class MyDevices extends Activity {
 	 */
 	private void displayLocation() {
 		Intent locintent = new Intent(this,DisplayMap.class);
-		//passlocation gotten from phone here to the displaymap class via intent extra
+		locintent.putExtra(FindMyPhone.Extra_Message, current.getPhone().toJSON().toString());
 		startActivity(locintent);
 	}
 
