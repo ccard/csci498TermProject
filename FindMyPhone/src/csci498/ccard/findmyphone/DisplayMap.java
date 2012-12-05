@@ -203,8 +203,8 @@ public class DisplayMap extends MapActivity {
 			
 			GeoPoint p = new GeoPoint(lat,lon);
 			
-			OverlayItem temp = items.getItem(0);
-			items.updateItem(0, new OverlayItem(loc,temp.getTitle(),temp.getSnippet()));
+			OverlayItem temp = items.getItem(1);
+			items.updateItem(1, new OverlayItem(p,temp.getTitle(),temp.getSnippet()));
 		}
     	
     }
