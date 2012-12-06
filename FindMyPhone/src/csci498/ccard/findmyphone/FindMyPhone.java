@@ -5,28 +5,39 @@
  */
 package csci498.ccard.findmyphone;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FindMyPhone extends Activity {
 
+	private static final String LOG_TAG = "FindMyPhone";
 	public static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
+	private EditText email;
+	private EditText password;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_my_phone);
         
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
         
-        Button login = (Button)findViewById(R.id.login);
+        Button login = (Button) findViewById(R.id.login);
         login.setOnClickListener(onLogin);
         
-        TextView create = (TextView)findViewById(R.id.createAccount);
+        TextView create = (TextView) findViewById(R.id.createAccount);
         create.setOnClickListener(onCreateAccount);
         
         startService(new Intent(this, CommandPollerService.class));
@@ -37,8 +48,36 @@ public class FindMyPhone extends Activity {
     private OnClickListener onLogin = new OnClickListener() {
     	
 		public void onClick(View view) {
-			//login confermation from server here and get info
-			displayMyDevices("whats up");
+			//login confirmation from server here and get info
+			JSONObject json = new JSONObject();
+			try {
+				json.put("command", "login");
+				json.put("email", email.getText().toString());
+				json.put("password_hash", password.getText().toString().hashCode());
+			} catch (JSONException e) {
+				Log.e(LOG_TAG, null, e);
+			}
+			
+			DataSender.getInstance().sendToServer(json.toString());
+			int i = 0;
+			while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 20)) {
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					Log.e(LOG_TAG, null, e);
+				}
+			}
+			
+			if ("".equals(DataSender.getInstance().getLastResult())) {
+				Toast.makeText(FindMyPhone.this, "An unspecified error has occured", Toast.LENGTH_SHORT).show();				
+			} else if (DataSender.ERROR.equals(DataSender.getInstance().getLastResult())) {
+				Toast.makeText(FindMyPhone.this, "Incorrect email/password combination", Toast.LENGTH_SHORT).show();
+				Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
+			} else {
+				displayMyDevices(DataSender.getInstance().getLastResult());
+			}
+		
+//			displayMyDevices("whats up");
 		}
 		
     };

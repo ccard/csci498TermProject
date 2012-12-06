@@ -8,7 +8,10 @@
 package csci498.ccard.findmyphone;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -18,6 +21,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,20 +66,31 @@ public class MyDevices extends Activity {
 
 			list.setAdapter(phoneAddapter);
 			list.setOnItemClickListener(onPhoneSelect);
+						
+			JSONObject json = null;
 			//replace this with blocks gotten from the server
-			Phone temp = new Phone();
-			if(intent.getStringExtra(FindMyPhone.Extra_Message) != null) {
-				temp.setName(intent.getStringExtra(FindMyPhone.Extra_Message).toString());
-			}
-			else {
-				temp.setName(getSharedPreferences("myfile",MODE_PRIVATE).getString("myfile", ""));
-				getSharedPreferences("myfile",MODE_PRIVATE).edit().remove("myfile").commit();
-			}
+			//			Phone temp = new Phone();
+			try {
+				if(intent.getStringExtra(FindMyPhone.Extra_Message) != null) {
+					json = new JSONObject(intent.getStringExtra(FindMyPhone.Extra_Message).toString());
+				}
+				else {
+					//				temp.setName(getSharedPreferences("myfile",MODE_PRIVATE).getString("myfile", ""));
+					//				getSharedPreferences("myfile",MODE_PRIVATE).edit().remove("myfile").commit();
+				}
 
-			temp.setNumber(000000100011);
-			temp.setPhonetype("Smart Phone");
-			current = new PhoneManager(temp);
-			phoneAddapter.add(current);
+				for (Iterator<String> it = json.keys(); it.hasNext();) {
+					String key = (String) it.next();
+					JSONObject jsonPhone = new JSONObject(json.getString(key));
+					Phone currentPhone = new Phone(jsonPhone);
+					current = new PhoneManager(currentPhone);
+					phoneAddapter.add(current);
+				}
+			} catch (Exception e) {
+				Log.e("MyDevices", null, e);
+			}
+//			
+			
 			//end of phone list population from severs
 
 			//initializes all the values to be used else where in code

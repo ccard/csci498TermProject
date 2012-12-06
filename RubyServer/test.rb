@@ -12,8 +12,8 @@ GET_PHONE_TYPE_ID_STATEMENT = "SELECT id FROM phone_type WHERE name=?"
 ADD_PHONE_STATEMENT = "INSERT INTO phone(name, ip_address, last_lattitude, last_longitude, id_unique, user_id, phone_type_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
 REMOVE_PHONE_STATEMENT = "DELETE FROM phone WHERE id_unique=?"
 ADD_USER_STATEMENT = "INSERT INTO user(email, password_hash) VALUES (?, ?)"
-GET_ALL_PHONES = "SELECT * FROM phone WHERE user_id=?"
-COLUMN_NAMES = ['id', 'name', 'ip_address', 'last_lattitude', 'last_longitude', 'id_unique', 'user_id', 'phone_type_id']
+GET_ALL_PHONES = "SELECT * FROM phone, phone_type WHERE phone.phone_type_id = phone_type.id AND user_id=?"
+COLUMN_NAMES = ['id', 'name', 'ip_address', 'last_lattitude', 'last_longitude', 'id_unique', 'user_id', 'phone_type_id', 'phone_type_id', 'phone_type']
 
 # Determines what to do with the request and calls the corresponding function
 def handle_requests(request)
@@ -28,6 +28,7 @@ def handle_requests(request)
 	elsif data['command'] == 'create_account'
 		return create_account(data)
 	else
+		puts "Unknown command: #{data['command']}"
 		return "ERROR"
 	end
 end

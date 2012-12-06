@@ -14,6 +14,8 @@ import android.util.Log;
 public class DataSender {
 	
 	public static final String SERVER_ADDRESS = "138.67.77.103";
+	public static final String DONE = "DONE";
+	public static final String ERROR = "ERROR";
 	private static String lastResult = "";	
 	private static DataSender ds = new DataSender();
 	
@@ -51,6 +53,7 @@ public class DataSender {
 
 	private class SenderTask extends AsyncTask<String, Void, String> {
 
+		private static final String LOG_MSG = "DataSender";
 		private static final int TCP_SERVER_PORT = 5050;
 
 		@Override
@@ -77,16 +80,16 @@ public class DataSender {
 					return returnMessage;
 				}
 			} catch (UnknownHostException e) {
-				Log.e("SenderTask", null, e);
+				Log.e(LOG_MSG, null, e);
 			} catch (IOException e) {
-				Log.e("SenderTask", null, e);
+				Log.e(LOG_MSG, null, e);
 			}
 			return "";
 		}
 
 		@Override
 		protected void onPostExecute(String objResult) {
-			Log.i("MSG: ", objResult);
+			Log.i(LOG_MSG, "Result: " + objResult);
 			lastResult = objResult;
 		}
 		

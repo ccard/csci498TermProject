@@ -32,7 +32,6 @@ import android.widget.EditText;
 public class CreateAccount extends Activity {
 	
 	private static final String LOG_TAG = "CreateAccount";
-	private static final String DONE = "DONE";
 	private static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
 	private EditText name;
 	private EditText email;
@@ -101,28 +100,29 @@ public class CreateAccount extends Activity {
 				try {
 					jsonData.put("command", "create_account");
 					jsonData.put("email", email.getText().toString());
-					jsonData.put("password_hash", password.getText().toString());
+					jsonData.put("password_hash", password.getText().toString().hashCode());
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, null, e);
 				}				
 				
 				DataSender.getInstance().sendToServer(jsonData.toString());
 				int i = 0;
-				while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 5)) {
+				while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 10)) {
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
 						Log.e(LOG_TAG, null, e);
 					}
 				}
-				if (DONE.equals(DataSender.getInstance().getLastResult())) {
+				
+				if (DataSender.DONE.equals(DataSender.getInstance().getLastResult())) {
 					showMyDevices(currentPhone);
-				} else if ("ERROR".equals(DataSender.getInstance().getLastResult())) {
+				} else if (DataSender.ERROR.equals(DataSender.getInstance().getLastResult())) {
 					dialog.setMessage("That email address is already registered");
 					dialog.show();
 					Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
 				} else {
-					dialog.setMessage("Could not connect to server");
+					dialog.setMessage("An unspecified error has occured");
 					dialog.show();
 				}
 			}
@@ -192,8 +192,14 @@ public class CreateAccount extends Activity {
 	 */
 	private void showMyDevices(Phone phone) {
 		finish();
+		JSONObject json = new JSONObject();
+		try {
+			json.put(phone.getName(), phone.toJSON().toString());
+		} catch (JSONException e) {
+			Log.e(LOG_TAG, null, e);
+		}
 		Intent intent = new Intent(this, MyDevices.class);
-		intent.putExtra(Extra_Message,phone.toString());
+		intent.putExtra(Extra_Message, json.toString());
 		//send info to my devices so this phone will be added 
 		startActivity(intent);
 	}
