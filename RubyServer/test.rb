@@ -7,7 +7,9 @@ require 'socket'
 $db = SQLite3::Database.open("phones.sqlite")
 webserver = TCPServer.new('138.67.77.103', 5050)
 USER_EXISTS_STATEMENT = "SELECT COUNT(*) FROM user WHERE email = ?"
-GET_USER_ID_STATEMENT = "SELECT id FROM user WHERE email=? AND password_hash=?"
+PHONE_EXISTS_STATEMENT = "SELECT COUNT(*) FROM phone WHERE id_unique = ?"
+GET_USER_ID_STATEMENT = "SELECT id FROM user WHERE email=?"
+GET_USER_ID_AUTH_STATEMENT = "SELECT id FROM user WHERE email=? AND password_hash=?"
 GET_PHONE_TYPE_ID_STATEMENT = "SELECT id FROM phone_type WHERE name=?"
 ADD_PHONE_STATEMENT = "INSERT INTO phone(name, ip_address, last_lattitude, last_longitude, id_unique, user_id, phone_type_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
 REMOVE_PHONE_STATEMENT = "DELETE FROM phone WHERE id_unique=?"
@@ -33,10 +35,23 @@ def handle_requests(request)
 	end
 end
 
+def unique_phone?(id_unique)
+	phone_id_count = $db.execute(PHONE_EXISTS_STATEMENT, id_unique)[0][0]
+	if Integer(phone_id_count) == 0
+		return true		
+	else
+		return false
+	end
+end
+
 def add_phone(data)
-	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'], data['password_hash'])[0][0]
+	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'])[0][0]
 	phone_type_id = $db.execute(GET_PHONE_TYPE_ID_STATEMENT, data['phone_type'])[0][0]
-	$db.execute(ADD_PHONE_STATEMENT, data['name'], data['ip_address'], data['last_lattitude'], data['last_longitude'], data['id_unique'], user_id, phone_type_id)
+	if unique_phone?(data['id_unique'])
+		$db.execute(ADD_PHONE_STATEMENT, data['name'], data['ip_address'], data['last_lattitude'], data['last_longitude'], data['id_unique'], user_id, phone_type_id)
+	else
+		return "PHONE_ADD_ERROR"
+	end
 	return "DONE"
 end
 
@@ -49,15 +64,19 @@ def create_account(data)
 	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
 	if Integer(user_exists) != 0
 		puts user_exists
-		return "ERROR"
+		return "USER_EXISTS_ERROR"
 	end
-	$db.execute(ADD_USER_STATEMENT, data['email'], data['password_hash'])
+	if !unique_phone?(data['id_unique'])
+		return "PHONE_ADD_ERROR"
+	end
+	$db.execute(ADD_USER_STATEMENT, [data['email'], data['password_hash']])
 	return add_phone(data)
 end
 
 def login(data)
-	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'], data['password_hash'])[0][0]
-	if user_id
+	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
+	if Integer(user_exists) != 0
+		user_id = $db.execute(GET_USER_ID_AUTH_STATEMENT, data['email'], data['password_hash'])[0][0]
 		phones = $db.execute(GET_ALL_PHONES, user_id)
 		phones_hash = Hash.new
 		phones.each do |phone|
@@ -94,6 +113,8 @@ begin
 		session.close
 	end
 rescue Exception => e
+	puts "Closing Server: #{e}"
+	webserver.close
 	$db.close
 end
 

@@ -22,7 +22,6 @@ import android.widget.Toast;
 public class FindMyPhone extends Activity {
 
 	private static final String LOG_TAG = "FindMyPhone";
-	public static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
 	private EditText email;
 	private EditText password;
 	
@@ -39,6 +38,8 @@ public class FindMyPhone extends Activity {
         
         TextView create = (TextView) findViewById(R.id.createAccount);
         create.setOnClickListener(onCreateAccount);
+        
+        CurrentPhoneManager.setContext(this);
         
         startService(new Intent(this, CommandPollerService.class));
     }
@@ -98,7 +99,7 @@ public class FindMyPhone extends Activity {
     public void displayCreateAccount(View view) {
     	finish();
     	Intent intent = new Intent (this, CreateAccount.class);
-    	intent.putExtra(Extra_Message, "Welcome");
+    	intent.putExtra(MyDevices.Extra_Message, "Welcome");
     	startActivity(intent);
     }
    
@@ -109,7 +110,8 @@ public class FindMyPhone extends Activity {
     public void displayMyDevices(String phoneInfo) {
     	finish();
     	Intent intent = new Intent (this, MyDevices.class);
-    	intent.putExtra(Extra_Message, phoneInfo);
+    	intent.putExtra(MyDevices.Extra_Message, phoneInfo);
+    	intent.putExtra(MyDevices.EMAIL_EXTRA_MESSAGE, email.getText().toString());
     	startActivity(intent);
     }
     

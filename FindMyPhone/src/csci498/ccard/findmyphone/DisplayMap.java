@@ -53,7 +53,7 @@ public class DisplayMap extends MapActivity {
         	map.setBuiltInZoomControls(true);
         	JSONObject details;
         	try {
-				details = new JSONObject(intent.getStringExtra(FindMyPhone.Extra_Message));
+				details = new JSONObject(intent.getStringExtra(MyDevices.Extra_Message));
 				otherPhone = new Phone(details);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

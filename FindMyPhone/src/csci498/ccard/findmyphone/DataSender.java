@@ -16,6 +16,8 @@ public class DataSender {
 	public static final String SERVER_ADDRESS = "138.67.77.103";
 	public static final String DONE = "DONE";
 	public static final String ERROR = "ERROR";
+	public static final String PHONE_ADD_ERROR = "PHONE_ADD_ERROR";
+	public static final String USER_EXISTS_ERROR = "USER_EXISTS_ERROR";
 	private static String lastResult = "";	
 	private static DataSender ds = new DataSender();
 	
@@ -68,6 +70,7 @@ public class DataSender {
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 
 				// Send the first parameter to the server
+				Log.i(LOG_MSG, "Sending data:" + params[1]);
 				out.write(params[1] + System.getProperty("line.separator"));
 				out.flush();
 

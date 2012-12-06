@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class PhoneManager {
 	
-	private Phone phone;
+	protected Phone phone;
 
 	public PhoneManager(Phone phone) {
 		super();

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -39,6 +40,8 @@ import android.widget.ViewFlipper;
 
 public class MyDevices extends Activity {
 
+	public static final String EMAIL_EXTRA_MESSAGE = "csci498.ccard.findmyphone.PHONE_EMAIL";
+	public static final String Extra_Message = "csci498.ccard.findmyphone.PHONE";
 	private ViewFlipper flip;
 	private TextView phoneName;
 	private EditText message;
@@ -47,6 +50,7 @@ public class MyDevices extends Activity {
 	private PhoneManager current;
 	private ArrayAdapter<PhoneManager> phoneAdapter;	
 	private Builder dialog;
+	private String email;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,9 @@ public class MyDevices extends Activity {
 		intent = getIntent();
 		//checks to see if this was started by an intent
 		if(intent != null) {
+			if (getIntent().getStringExtra(EMAIL_EXTRA_MESSAGE) != null) {
+				email = getIntent().getStringExtra(EMAIL_EXTRA_MESSAGE);
+			}
 			//populate phone list from servers here
 			myPhones = new ArrayList<PhoneManager>();//replace this with what ever method populates the phone list from servers
 
@@ -71,8 +78,8 @@ public class MyDevices extends Activity {
 			//replace this with blocks gotten from the server
 			//			Phone temp = new Phone();
 			try {
-				if(intent.getStringExtra(FindMyPhone.Extra_Message) != null) {
-					json = new JSONObject(intent.getStringExtra(FindMyPhone.Extra_Message).toString());
+				if(intent.getStringExtra(Extra_Message) != null) {
+					json = new JSONObject(intent.getStringExtra(Extra_Message).toString());
 				}
 				else {
 					//				temp.setName(getSharedPreferences("myfile",MODE_PRIVATE).getString("myfile", ""));
@@ -134,25 +141,28 @@ public class MyDevices extends Activity {
 	 * or onitemclicklisteners
 	 */
 	private void initOnClicks() {
-		TextView senda = (TextView)findViewById(R.id.sendamessage);
+		TextView senda = (TextView) findViewById(R.id.sendamessage);
 		senda.setOnClickListener(onSendaMessage);
 
-		TextView tone = (TextView)findViewById(R.id.playtone);
+		TextView tone = (TextView) findViewById(R.id.playtone);
 		tone.setOnClickListener(onPlayTone);
 
-		TextView map = (TextView)findViewById(R.id.showphone);
+		TextView map = (TextView) findViewById(R.id.showphone);
 		map.setOnClickListener(onShowPhone);
 
-		Button send = (Button)findViewById(R.id.send);
+		Button send = (Button) findViewById(R.id.send);
 		send.setOnClickListener(onSend);
 
-		Button backOptions = (Button)findViewById(R.id.backsend);
+		Button backOptions = (Button) findViewById(R.id.backsend);
 		backOptions.setOnClickListener(onBack);
 
-		Button backMyPhones = (Button)findViewById(R.id.backphone);
+		Button backMyPhones = (Button) findViewById(R.id.backphone);
 		backMyPhones.setOnClickListener(onBack);
+		
+//		Button addPhone = (Button) findViewById(R.id.add_phone_button);
+//		addPhone.setOnClickListener(onAddPhone);
 	}
-
+	
 	//This provides functionality for the back buttons
 	private OnClickListener onBack = new OnClickListener() {
 		
@@ -224,12 +234,24 @@ public class MyDevices extends Activity {
 		}
 	};
 
+	private void addPhoneToServer() {
+		JSONObject json = CurrentPhoneManager.getInstance().getPhone().toJSON();			
+		try {
+			json.put("command", "add_phone");
+			json.put("email", email);
+		} catch (JSONException e) {
+			Log.e("MyDevices", null, e);
+		}
+		
+		DataSender.getInstance().sendToServer(json.toString());
+	}
+	
 	/**
 	 * This initializes the displaymap activity that uses google maps to show the location of the device
 	 */
 	private void displayLocation() {
-		Intent locintent = new Intent(this,DisplayMap.class);
-		locintent.putExtra(FindMyPhone.Extra_Message, current.getPhone().toJSON().toString());
+		Intent locintent = new Intent(this, DisplayMap.class);
+		locintent.putExtra(Extra_Message, current.getPhone().toJSON().toString());
 		startActivity(locintent);
 	}
 
