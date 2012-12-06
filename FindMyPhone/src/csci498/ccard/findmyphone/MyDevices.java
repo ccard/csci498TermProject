@@ -45,7 +45,7 @@ public class MyDevices extends Activity {
 	private Intent intent;
 	private List<PhoneManager> myPhones;
 	private PhoneManager current;
-	private ArrayAdapter<PhoneManager> phoneAddapter;	
+	private ArrayAdapter<PhoneManager> phoneAdapter;	
 	private Builder dialog;
 
 	@Override
@@ -61,10 +61,10 @@ public class MyDevices extends Activity {
 
 			//stores the list of phones so it can populate the listview with out having to keep
 			//refering to the list view
-			phoneAddapter = new PhoneAdapter();
+			phoneAdapter = new PhoneAdapter();
 			ListView list = (ListView)findViewById(R.id.MyPhones);
 
-			list.setAdapter(phoneAddapter);
+			list.setAdapter(phoneAdapter);
 			list.setOnItemClickListener(onPhoneSelect);
 						
 			JSONObject json = null;
@@ -84,7 +84,7 @@ public class MyDevices extends Activity {
 					JSONObject jsonPhone = new JSONObject(json.getString(key));
 					Phone currentPhone = new Phone(jsonPhone);
 					current = new PhoneManager(currentPhone);
-					phoneAddapter.add(current);
+					phoneAdapter.add(current);
 				}
 			} catch (Exception e) {
 				Log.e("MyDevices", null, e);
@@ -246,17 +246,17 @@ public class MyDevices extends Activity {
 
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View row = convertView;
-			PhoneMangerHolder holder = null;
+			PhoneManagerHolder holder = null;
 
 			if(row == null) {
 				LayoutInflater inflater = getLayoutInflater();
 
 				row = inflater.inflate(R.layout.phone_view, null);
-				holder = new PhoneMangerHolder(row);
+				holder = new PhoneManagerHolder(row);
 				row.setTag(holder);
 			}
 			else {
-				holder = (PhoneMangerHolder)row.getTag();
+				holder = (PhoneManagerHolder)row.getTag();
 			}
 
 			holder.populateForm(myPhones.get(position));
@@ -271,12 +271,12 @@ public class MyDevices extends Activity {
 	 * @author Chris
 	 *
 	 */
-	static class PhoneMangerHolder {
+	static class PhoneManagerHolder {
 
 		private TextView name = null;
 		private TextView type = null;
 
-		PhoneMangerHolder(View row) {
+		PhoneManagerHolder(View row) {
 			name = (TextView)row.findViewById(R.id.phoneName);
 			type = (TextView)row.findViewById(R.id.phoneType);
 		}
