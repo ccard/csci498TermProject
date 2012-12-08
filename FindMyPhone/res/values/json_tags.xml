@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="last_lattitude">last_lattitude</string>
+<string name="last_longitude">last_longitude</string>
+<string name="get_location">get_location</string>
+<string name="command">command</string>
+<string name="create_account">create_account</string>
+<string name="email">email</string>
+<string name="password_hash">password_hash</string>
+<string name="add_phone">add_phone</string>
+<string name="name">name</string>
+    
+</resources>
