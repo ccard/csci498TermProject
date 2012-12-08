@@ -52,9 +52,9 @@ public class FindMyPhone extends Activity {
 			//login confirmation from server here and get info
 			JSONObject json = new JSONObject();
 			try {
-				json.put("command", "login");
-				json.put("email", email.getText().toString());
-				json.put("password_hash", password.getText().toString().hashCode());
+				json.put(getString(R.string.command), "login");
+				json.put(getString(R.string.email), email.getText().toString());
+				json.put(getString(R.string.password_hash), password.getText().toString().hashCode());
 			} catch (JSONException e) {
 				Log.e(LOG_TAG, null, e);
 			}

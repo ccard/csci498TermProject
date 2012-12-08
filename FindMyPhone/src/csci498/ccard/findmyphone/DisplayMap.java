@@ -21,6 +21,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -75,14 +76,29 @@ public class DisplayMap extends MapActivity {
         	//initailizes overlays for drop pins to show the phones location
         	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
         	mc = map.getController();
-        	int lat = (int)(39.755543*1E6);
-        	int lon = (int)(-105.2210997*1E6);
-        	loc = new GeoPoint(lat,lon);
+        	CurrentPhoneManager.setPhoneLocation();
+        	double lattitude = 0;
+        	double longitude = 0;
+        	int i = 0;
+        	while (lattitude == 0 && longitude == 0 && i++ < 10) {
+	        	try {
+	        		Thread.sleep(30);
+	            	lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
+	            	longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
+	        	} catch (Exception e) {
+	        		Log.e("DisplayMap", null, e);
+	        	}
+        	}
+//        	double lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
+//        	double longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
+        	int lat = (int) (lattitude * 1E6);
+        	int lon = (int) (longitude * 1E6);
+        	loc = new GeoPoint(lat, lon);
         	mc.setCenter(loc);
         	mc.setZoom(14);
         	gpsAccuracy = (float) 6.0;
-        	items.addOverlay(new OverlayItem(loc,"Me",""));
-        	items.addOverlay(new OverlayItem(new GeoPoint((int)otherPhone.getLastLattitude(), (int)otherPhone.getLastLongitude()), otherPhone.getName(),""));
+        	items.addOverlay(new OverlayItem(loc, "Me", ""));
+        	items.addOverlay(new OverlayItem(new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6)), otherPhone.getName(),""));
         	map.getOverlays().add(items);
         	other = new GetOther();
         	other.execute(otherPhone.getIpAddress());
@@ -180,41 +196,57 @@ public class DisplayMap extends MapActivity {
 			
 			//run comunications code here
 			//update the gui once it gets a message of the location
-			//pass in location in the format Latitud:Longitude
+			//pass in location in the format Latitude:Longitude
 			JSONObject phoneCommand = new JSONObject();
 			try {
-				phoneCommand.put("command", "get_location");
+				phoneCommand.put(getString(R.string.command), R.string.get_location);
 			} catch (JSONException e) {
 				Log.e("DisplayMap", null, e);
 			}
-			DataSender.getInstance().sendToPhone(ip, phoneCommand.toString());
-			String result = DataSender.getInstance().waitForResult();
-			try {
-				JSONObject phoneStatus = new JSONObject(result);
+			while (true) {
+				DataSender.getInstance().sendToPhone(ip, phoneCommand.toString());
+				String result = DataSender.getInstance().waitForResult();
 				
-				StringBuilder location = new StringBuilder();
-				location.append(phoneStatus.getString("last_lattitude"));
-				location.append(":");
-				location.append(phoneStatus.getString("last_longitude"));
+				if ("".equals(result)) {
+//					Toast.makeText(DisplayMap.this, "No response from phone", Toast.LENGTH_LONG).show();
+					
+				} else {
+					try {
+						JSONObject phoneStatus = new JSONObject(result);
+						
+						StringBuilder location = new StringBuilder();
+						location.append(phoneStatus.getString(getString(R.string.last_lattitude)));
+						location.append(":");
+						location.append(phoneStatus.getString(getString(R.string.last_longitude)));
+						
+						publishProgress(location.toString());						
+					} catch (Exception e) {
+						Log.e("DisplayMap", null, e);
+					}
+				}
 				
-				publishProgress(location.toString());
-			} catch (Exception e) {
-				Log.e("DisplayMap", null, e);
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.e("DisplayMap", null, e);
+				}
 			}
 						
-			return null;
+//			return null;
 		}
 		
 		protected void onProgressUpdate(String location)
 		{
 			String words[] = location.split(":");
-			int lat = Integer.parseInt(words[0]);
-			int lon = Integer.parseInt(words[1]);
+			int lat = (int) (Double.parseDouble(words[0]) * 1E6);
+			int lon = (int) (Double.parseDouble(words[1]) * 1E6);
 			
 			GeoPoint p = new GeoPoint(lat,lon);
 			
 			OverlayItem temp = items.getItem(1);
-			items.updateItem(1, new OverlayItem(p,temp.getTitle(),temp.getSnippet()));
+			items.updateItem(1, new OverlayItem(p, temp.getTitle(), temp.getSnippet()));
 		}
     	
     }

@@ -36,6 +36,7 @@ public class CurrentPhoneManager extends PhoneManager {
 		CurrentPhoneManager.context = context;		
 		setUpPhoneData(instance.phone);
 		locMgr = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		setPhoneLocation();
 	}
 	
 	public static CurrentPhoneManager getInstance() {

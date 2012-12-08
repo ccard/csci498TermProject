@@ -85,9 +85,9 @@ public class CreateAccount extends Activity {
 				JSONObject jsonData = currentPhone.toJSON();					
 				// add stuff for account here
 				try {
-					jsonData.put("command", "create_account");
-					jsonData.put("email", email.getText().toString());
-					jsonData.put("password_hash", password.getText().toString().hashCode());
+					jsonData.put(getString(R.string.command), R.string.create_account);
+					jsonData.put(getString(R.string.email), email.getText().toString());
+					jsonData.put(getString(R.string.password_hash), password.getText().toString().hashCode());
 				} catch (JSONException e) {
 					Log.e(LOG_TAG, null, e);
 				}				
