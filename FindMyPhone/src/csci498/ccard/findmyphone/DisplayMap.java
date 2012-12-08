@@ -187,11 +187,21 @@ public class DisplayMap extends MapActivity {
 			} catch (JSONException e) {
 				Log.e("DisplayMap", null, e);
 			}
-			DataSender.getInstance().sendToPhone(otherPhone.getIpAddress(), phoneCommand.toString());
-			
-			
-			publishProgress("");
-			
+			DataSender.getInstance().sendToPhone(ip, phoneCommand.toString());
+			String result = DataSender.getInstance().waitForResult();
+			try {
+				JSONObject phoneStatus = new JSONObject(result);
+				
+				StringBuilder location = new StringBuilder();
+				location.append(phoneStatus.getString("last_lattitude"));
+				location.append(":");
+				location.append(phoneStatus.getString("last_longitude"));
+				
+				publishProgress(location.toString());
+			} catch (Exception e) {
+				Log.e("DisplayMap", null, e);
+			}
+						
 			return null;
 		}
 		
