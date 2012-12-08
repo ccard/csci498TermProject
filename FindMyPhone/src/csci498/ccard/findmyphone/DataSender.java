@@ -18,6 +18,7 @@ public class DataSender {
 	public static final String ERROR = "ERROR";
 	public static final String PHONE_ADD_ERROR = "PHONE_ADD_ERROR";
 	public static final String USER_EXISTS_ERROR = "USER_EXISTS_ERROR";
+	private static final String LOG_MSG = "DataSender";
 	private static String lastResult = "";	
 	private static DataSender ds = new DataSender();
 	
@@ -49,13 +50,24 @@ public class DataSender {
 		new SenderTask().execute(ipAddress, jsonData);
 	}
 	
-	public String getLastResult() {
-		return lastResult;
+//	public String getLastResult() {
+//		return lastResult;
+//	}
+	
+	public String waitForResult() {
+		int i = 0;
+		while ("".equals(lastResult) && (i++ < 20)) {
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				Log.e(LOG_MSG, null, e);
+			}
+		}
+		return lastResult;		
 	}
 
 	private class SenderTask extends AsyncTask<String, Void, String> {
 
-		private static final String LOG_MSG = "DataSender";
 		private static final int TCP_SERVER_PORT = 5050;
 
 		@Override

@@ -48,7 +48,7 @@ def add_phone(data)
 	user_id = $db.execute(GET_USER_ID_STATEMENT, data['email'])[0][0]
 	phone_type_id = $db.execute(GET_PHONE_TYPE_ID_STATEMENT, data['phone_type'])[0][0]
 	if unique_phone?(data['id_unique'])
-		$db.execute(ADD_PHONE_STATEMENT, data['name'], data['ip_address'], data['last_lattitude'], data['last_longitude'], data['id_unique'], user_id, phone_type_id)
+		$db.execute(ADD_PHONE_STATEMENT, [data['name'], data['ip_address'], data['last_lattitude'], data['last_longitude'], data['id_unique'], user_id, phone_type_id])
 	else
 		return "PHONE_ADD_ERROR"
 	end
@@ -76,7 +76,7 @@ end
 def login(data)
 	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
 	if Integer(user_exists) != 0
-		user_id = $db.execute(GET_USER_ID_AUTH_STATEMENT, data['email'], data['password_hash'])[0][0]
+		user_id = $db.execute(GET_USER_ID_AUTH_STATEMENT, [data['email'], data['password_hash']])[0][0]
 		phones = $db.execute(GET_ALL_PHONES, user_id)
 		phones_hash = Hash.new
 		phones.each do |phone|

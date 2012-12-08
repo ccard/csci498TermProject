@@ -13,4 +13,8 @@
     <!-- for creat account -->
     <string name="name_ex">John Hancock</string>
     <string name="acc_email">fry@planetexpress.inc</string>
+    <string name="error_connecting_to_server">Error connecting to server</string>
+    <string name="this_phone_is_already_registered">This phone is already registered</string>
+    <string name="email_already_registered">That email address is already registered</string>
+    <string name="incorrect_email_password">Incorrect email/password combination</string>
 </resources>

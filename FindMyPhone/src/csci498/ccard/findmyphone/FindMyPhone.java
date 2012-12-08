@@ -60,22 +60,15 @@ public class FindMyPhone extends Activity {
 			}
 			
 			DataSender.getInstance().sendToServer(json.toString());
-			int i = 0;
-			while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 20)) {
-				try {
-					Thread.sleep(20);
-				} catch (InterruptedException e) {
-					Log.e(LOG_TAG, null, e);
-				}
-			}
+			String result = DataSender.getInstance().waitForResult();
 			
-			if ("".equals(DataSender.getInstance().getLastResult())) {
-				Toast.makeText(FindMyPhone.this, "An unspecified error has occured", Toast.LENGTH_SHORT).show();				
-			} else if (DataSender.ERROR.equals(DataSender.getInstance().getLastResult())) {
-				Toast.makeText(FindMyPhone.this, "Incorrect email/password combination", Toast.LENGTH_SHORT).show();
+			if ("".equals(result)) {
+				Toast.makeText(FindMyPhone.this, R.string.error_connecting_to_server, Toast.LENGTH_SHORT).show();				
+			} else if (DataSender.ERROR.equals(result)) {
+				Toast.makeText(FindMyPhone.this, R.string.incorrect_email_password, Toast.LENGTH_SHORT).show();
 				Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
 			} else {
-				displayMyDevices(DataSender.getInstance().getLastResult());
+				displayMyDevices(result);
 			}
 		
 //			displayMyDevices("whats up");

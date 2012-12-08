@@ -92,28 +92,21 @@ public class CreateAccount extends Activity {
 					Log.e(LOG_TAG, null, e);
 				}				
 				
-				DataSender.getInstance().sendToServer(jsonData.toString());
-				int i = 0;
-				while ("".equals(DataSender.getInstance().getLastResult()) && (i++ < 10)) {
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						Log.e(LOG_TAG, null, e);
-					}
-				}
+				DataSender.getInstance().sendToServer(jsonData.toString());				
+				String sentStatus = DataSender.getInstance().waitForResult();
 				
-				if (DataSender.DONE.equals(DataSender.getInstance().getLastResult())) {
+				if (DataSender.DONE.equals(sentStatus)) {
 					showMyDevices(currentPhone);
-				} else if (DataSender.USER_EXISTS_ERROR.equals(DataSender.getInstance().getLastResult())) {
-					dialog.setMessage("That email address is already registered");
+				} else if (DataSender.USER_EXISTS_ERROR.equals(sentStatus)) {
+					dialog.setMessage(R.string.email_already_registered);
 					dialog.show();
 					Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
-				} else if (DataSender.PHONE_ADD_ERROR.equals(DataSender.getInstance().getLastResult())) {
-					dialog.setMessage("This phone is already registered");
+				} else if (DataSender.PHONE_ADD_ERROR.equals(sentStatus)) {
+					dialog.setMessage(R.string.this_phone_is_already_registered);
 					dialog.show();
 					Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
 				} else {
-					dialog.setMessage("An unspecified error has occured");
+					dialog.setMessage(R.string.error_connecting_to_server);
 					dialog.show();
 				}
 			}

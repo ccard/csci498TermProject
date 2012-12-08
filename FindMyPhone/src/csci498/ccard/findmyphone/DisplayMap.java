@@ -181,6 +181,15 @@ public class DisplayMap extends MapActivity {
 			//run comunications code here
 			//update the gui once it gets a message of the location
 			//pass in location in the format Latitud:Longitude
+			JSONObject phoneCommand = new JSONObject();
+			try {
+				phoneCommand.put("command", "get_location");
+			} catch (JSONException e) {
+				Log.e("DisplayMap", null, e);
+			}
+			DataSender.getInstance().sendToPhone(otherPhone.getIpAddress(), phoneCommand.toString());
+			
+			
 			publishProgress("");
 			
 			return null;

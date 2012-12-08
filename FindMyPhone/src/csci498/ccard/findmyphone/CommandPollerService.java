@@ -47,17 +47,14 @@ public class CommandPollerService extends IntentService {
 
 				JSONObject json_map = new JSONObject(in.readLine());
 				String command = json_map.getString("command");
-				String data = json_map.getString("data");
 				
 				// TODO: Do whatever to execute the command
-
-				Log.i("COMMAND", "RECEIVED MESSAGE: command is " + command + " data is " + data);
-				JSONObject temp = new JSONObject();
-				temp.put("comm", command);
-				temp.put("dat", data);
-				Toast.makeText(this, temp.toString(), Toast.LENGTH_LONG).show();
-				out.write(temp.toString());
+				Log.i("COMMAND", "RECEIVED MESSAGE: command is " + command);
+				JSONObject temp = handleCommand(command, json_map);
 				
+				
+				Toast.makeText(this, temp.toString(), Toast.LENGTH_LONG).show();
+				out.write(temp.toString());				
 				
 				out.flush();
 				out.close();
@@ -66,6 +63,14 @@ public class CommandPollerService extends IntentService {
 				Log.e("ConnectionError", null, e);
 			}
 		}
+	}
+
+	private JSONObject handleCommand(String command, JSONObject json_map) {
+		if ("get_location".equals(command)) {
+			CurrentPhoneManager.setPhoneLocation();
+			return CurrentPhoneManager.getInstance().getPhone().toJSON(); 
+		}
+		return null;
 	}
 
 
