@@ -52,7 +52,7 @@ public class FindMyPhone extends Activity {
 			//login confirmation from server here and get info
 			JSONObject json = new JSONObject();
 			try {
-				json.put(getString(R.string.command), "login");
+				json.put(getString(R.string.command), getString(R.string.login));
 				json.put(getString(R.string.email), email.getText().toString());
 				json.put(getString(R.string.password_hash), password.getText().toString().hashCode());
 			} catch (JSONException e) {
@@ -63,9 +63,9 @@ public class FindMyPhone extends Activity {
 			String result = DataSender.getInstance().waitForResult();
 			
 			if ("".equals(result)) {
-				Toast.makeText(FindMyPhone.this, R.string.error_connecting_to_server, Toast.LENGTH_SHORT).show();				
+				Toast.makeText(FindMyPhone.this, getString(R.string.error_connecting_to_server), Toast.LENGTH_SHORT).show();				
 			} else if (DataSender.ERROR.equals(result)) {
-				Toast.makeText(FindMyPhone.this, R.string.incorrect_email_password, Toast.LENGTH_SHORT).show();
+				Toast.makeText(FindMyPhone.this, getString(R.string.incorrect_email_password), Toast.LENGTH_SHORT).show();
 				Log.e(LOG_TAG, "ERROR CREATING ACCOUNT");
 			} else {
 				displayMyDevices(result);

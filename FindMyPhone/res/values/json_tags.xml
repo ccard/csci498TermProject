@@ -8,5 +8,6 @@
 <string name="password_hash">password_hash</string>
 <string name="add_phone">add_phone</string>
 <string name="name">name</string>
+<string name="login">login</string>
     
 </resources>

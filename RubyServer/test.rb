@@ -107,10 +107,10 @@ end
 
 begin
 	while session = webserver.accept
-		# session.puts "HELLO"
 		request = session.gets
 		session.print handle_requests(request)
 		session.close
+		puts "Ready for next request"
 	end
 rescue Exception => e
 	puts "Closing Server: #{e}"

@@ -264,7 +264,7 @@ public class MyDevices extends Activity {
 	private void addPhoneToServer(String name) {
 		JSONObject json = CurrentPhoneManager.getInstance().getPhone().toJSON();			
 		try {
-			json.put(getString(R.string.command), R.string.add_phone);
+			json.put(getString(R.string.command), getString(R.string.add_phone));
 			json.put(getString(R.string.email), email);
 			json.put(getString(R.string.name), name);
 		} catch (JSONException e) {
