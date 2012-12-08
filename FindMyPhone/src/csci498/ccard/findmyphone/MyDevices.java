@@ -15,7 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
@@ -126,10 +128,35 @@ public class MyDevices extends Activity {
 		return true;
 	}
 
+	// TODO: Implement some way to get the name of the phone
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.add_phone) {
-			addPhoneToServer();
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Add Phone");
+			alert.setMessage("Name this phone:");
+
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  String value = input.getText().toString();
+			  addPhoneToServer(value);
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+			alert.show();
+			
+			
 			return true;
 		}
 
@@ -234,11 +261,12 @@ public class MyDevices extends Activity {
 		}
 	};
 
-	private void addPhoneToServer() {
+	private void addPhoneToServer(String name) {
 		JSONObject json = CurrentPhoneManager.getInstance().getPhone().toJSON();			
 		try {
 			json.put("command", "add_phone");
 			json.put("email", email);
+			json.put("name", name);
 		} catch (JSONException e) {
 			Log.e("MyDevices", null, e);
 		}
