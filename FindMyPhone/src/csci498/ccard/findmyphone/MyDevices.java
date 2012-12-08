@@ -129,7 +129,7 @@ public class MyDevices extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == R.id.add_phone) {
-			//add phone info to server here
+			addPhoneToServer();
 			return true;
 		}
 
