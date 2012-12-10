@@ -11,6 +11,7 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -34,6 +35,14 @@ public class CommandPollerService extends IntentService {
 		} catch (IOException e) {
 			Log.e("CommandPoller", null, e);
 		}
+		
+		Notification note = new Notification();
+		
+		note.icon = R.drawable.ic_launcher;
+		note.flags |= Notification.FLAG_NO_CLEAR;
+		note.flags |= Notification.FLAG_FOREGROUND_SERVICE;
+		
+		startForeground(1133, note);
 	}
 	
 	@Override
