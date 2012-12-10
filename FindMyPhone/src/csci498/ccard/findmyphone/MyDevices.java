@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class MyDevices extends Activity {
@@ -50,6 +51,7 @@ public class MyDevices extends Activity {
 	private Intent intent;
 	private List<PhoneManager> myPhones;
 	private PhoneManager current;
+	private int currentList;
 	private ArrayAdapter<PhoneManager> phoneAdapter;	
 	private Builder dialog;
 	private String email;
@@ -182,6 +184,9 @@ public class MyDevices extends Activity {
 
 		Button backOptions = (Button) findViewById(R.id.backsend);
 		backOptions.setOnClickListener(onBack);
+		
+		TextView remove = (TextView)findViewById(R.id.deletePhone);
+		remove.setOnClickListener(onRemove);
 
 		Button backMyPhones = (Button) findViewById(R.id.backphone);
 		backMyPhones.setOnClickListener(onBack);
@@ -206,7 +211,7 @@ public class MyDevices extends Activity {
 		public void onItemClick(AdapterView<?> adapter, View view, int position,
 				long length)  {
 			current = myPhones.get(position);
-
+			currentList = position;
 			phoneName.setText(current.getPhone().getName());
 			flip.showNext();
 		}
@@ -235,6 +240,37 @@ public class MyDevices extends Activity {
 
 			flip.showPrevious();
 		}
+		
+	};
+	
+	private OnClickListener onRemove = new OnClickListener(){
+
+		public void onClick(View v) {
+			
+			JSONObject j = current.getPhone().toJSON();
+			try {
+				j.put(getString(R.string.command), "remove_phone");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Log.e("MyDevices", null,e);
+			}
+			
+			DataSender.getInstance().sendToServer(j.toString());
+			
+			String result = DataSender.getInstance().waitForResult();
+			
+			if(DataSender.DONE.equals(result))
+			{
+				flip.showPrevious();
+				myPhones.remove(currentList);
+				MyDevices.this.findViewById(R.id.MyPhones).invalidate();
+			}
+			else
+			{
+				Toast.makeText(MyDevices.this, "Cann't connect to server", Toast.LENGTH_SHORT).show();
+			}
+		}
+		
 		
 	};
 

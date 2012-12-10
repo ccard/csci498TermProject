@@ -118,6 +118,29 @@
             
             <TableRow
                 android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+
+                    <TextView
+                        android:id="@+id/deletePhone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="5dp"
+                        android:textSize="25sp"
+                        android:textColor="@android:color/black"
+                        android:background="@drawable/roundedboarders"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="true"
+                        android:text="Remove the Device" />
+                </LinearLayout>
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content" 
                 android:layout_marginTop="10dp">
 
