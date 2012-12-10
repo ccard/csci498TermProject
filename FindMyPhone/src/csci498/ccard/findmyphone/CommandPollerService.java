@@ -16,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.widget.RemoteViews;
+import android.widget.RemoteViews.RemoteView;
 
 public class CommandPollerService extends IntentService {
 	
@@ -41,6 +43,12 @@ public class CommandPollerService extends IntentService {
 		note.icon = R.drawable.ic_launcher;
 		note.flags |= Notification.FLAG_NO_CLEAR;
 		note.flags |= Notification.FLAG_FOREGROUND_SERVICE;
+		
+		RemoteViews c = new RemoteViews(getPackageName(),R.layout.notification_view);
+		c.setTextViewText(R.id.noteTitle, "FindMyPhone talking to server");
+		
+		note.contentView = c;
+		
 		
 		startForeground(1133, note);
 	}
