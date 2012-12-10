@@ -6,6 +6,8 @@
 package csci498.ccard.findmyphone;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,11 +36,15 @@ public class DisplayMap extends MapActivity {
 
 	private LocationManager locmgr = null;	
 	private GeoPoint loc;
+	private GeoPoint locOther;
 	private MapController mc;
 	private Overlay items;
 	private float gpsAccuracy;
 	private Phone otherPhone;
 	private GetOther other;
+	private MapView map;
+	
+	private AtomicBoolean run = new AtomicBoolean(true);
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,8 @@ public class DisplayMap extends MapActivity {
        
         Intent intent = getIntent();
         if(intent != null) {
-        	locmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        	locmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, onLocChange);
         
-        	MapView map = (MapView)findViewById(R.id.mapview);
+        	map = (MapView)findViewById(R.id.mapview);
         	map.setBuiltInZoomControls(true);
         	JSONObject details;
         	try {
@@ -74,9 +78,9 @@ public class DisplayMap extends MapActivity {
 			}
         	
         	//initailizes overlays for drop pins to show the phones location
-        	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
+        	
         	mc = map.getController();
-        	CurrentPhoneManager.setPhoneLocation();
+        	//CurrentPhoneManager.setPhoneLocation();
         	double lattitude = 0;
         	double longitude = 0;
         	int i = 0;
@@ -91,60 +95,40 @@ public class DisplayMap extends MapActivity {
         	}
 //        	double lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
 //        	double longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
-        	int lat = (int) (lattitude * 1E6);
-        	int lon = (int) (longitude * 1E6);
+        	int lat = (int) (lattitude);
+        	int lon = (int) (longitude);
         	loc = new GeoPoint(lat, lon);
         	mc.setCenter(loc);
         	mc.setZoom(14);
         	gpsAccuracy = (float) 6.0;
-        	items.addOverlay(new OverlayItem(loc, "Me", ""));
-        	items.addOverlay(new OverlayItem(new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6)), otherPhone.getName(),""));
-        	map.getOverlays().add(items);
+        	locOther = new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6));
+        	updateOverlay();
         	other = new GetOther();
         	other.execute(otherPhone.getIpAddress());
+        	
         }
+    }
+    
+    public void updateOverlay()
+    {
+    	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
+    	items.addOverlay(new OverlayItem(loc, "Me", ""));
+    	items.addOverlay(new OverlayItem(locOther, otherPhone.getName(),""));
+   
+    	map.getOverlays().add(items);
+    	map.invalidate();
     }
     
     @Override
     public void onDestroy() {
     	super.onDestroy();
-    	locmgr.removeUpdates(onLocChange);
     	if(other.getStatus() == AsyncTask.Status.RUNNING)
     	{
-    		other.cancel(true);
+    		run.set(false);
     	}
     }
 
-    //this listens for changes for location of the phone inquestion
-    private LocationListener onLocChange = new LocationListener() {
-
-		public void onLocationChanged(Location location) {
-			if(location != null) {
-				int latE6 = (int)(location.getLatitude()*1E6);
-				int lonE6 = (int)(location.getLongitude()*1E6);
-				
-				gpsAccuracy = location.getAccuracy();
-				
-				//put methods here to allow alternate phone to get this phones location
-				loc = new GeoPoint(latE6,lonE6);
-				OverlayItem temp = items.getItem(0);
-				items.updateItem(0, new OverlayItem(loc,temp.getTitle(),temp.getSnippet()));
-			}
-		}
-
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub			
-		}
-
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-		}
-
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-		}
-    	
-    };
+ 
 	
     @Override
 	protected boolean isRouteDisplayed() {
@@ -203,7 +187,7 @@ public class DisplayMap extends MapActivity {
 			} catch (JSONException e) {
 				Log.e("DisplayMap", null, e);
 			}
-			while (true) {
+			while (run.get()) {
 				DataSender.getInstance().sendToPhone(ip, phoneCommand.toString());
 				String result = DataSender.getInstance().waitForResult();
 				
@@ -221,7 +205,7 @@ public class DisplayMap extends MapActivity {
 						
 						publishProgress(location.toString());						
 					} catch (Exception e) {
-						Log.e("DisplayMap", null, e);
+						Log.e("DisplayMap.java", null, e);
 					}
 				}
 				
@@ -229,24 +213,26 @@ public class DisplayMap extends MapActivity {
 					Thread.sleep(60000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Log.e("DisplayMap", null, e);
+					Log.e("DisplayMap.java",null, e);
 				}
 			}
 						
-//			return null;
+			return "";
 		}
 		
-		protected void onProgressUpdate(String location)
+		@Override
+		protected void onProgressUpdate(String... location)
 		{
-			String words[] = location.split(":");
+			Log.v("before split", "");
+			String words[] = location[0].split(":");
+			Log.v("After split", "hi");
 			int lat = (int) (Double.parseDouble(words[0]) * 1E6);
 			int lon = (int) (Double.parseDouble(words[1]) * 1E6);
+			Log.v("THis","lat: "+lat+" lom: "+lon);
+			locOther = new GeoPoint(lat,lon);
+			loc = new GeoPoint((int)CurrentPhoneManager.getInstance().getPhone().getLastLattitude(),(int)CurrentPhoneManager.getInstance().getPhone().getLastLongitude());
 			
-			GeoPoint p = new GeoPoint(lat,lon);
-			
-			OverlayItem temp = items.getItem(1);
-			items.updateItem(1, new OverlayItem(p, temp.getTitle(), temp.getSnippet()));
+			updateOverlay();
 		}
     	
     }
