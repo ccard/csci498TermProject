@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.IntentService;
@@ -24,14 +23,27 @@ public class CommandPollerService extends IntentService {
 	
 	public CommandPollerService() {
 		super("CommandPoller");
+
+	}
+
+	@Override
+	public void onCreate() {
 		try {
 			ssocket = new ServerSocket(5050);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.e("CommandPoller", null, e);
 		}
 	}
-
+	
+	@Override
+	public void onDestroy() {
+		try {
+			ssocket.close();
+		} catch (IOException e) {
+			Log.e("CommandPoller", null, e);
+		}
+	}
+	
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		getAndExecuteCommand();
