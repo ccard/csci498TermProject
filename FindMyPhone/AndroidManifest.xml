@@ -67,7 +67,6 @@
         </activity>
         <receiver android:permission="android.permission.RECEIVE_BOOT_COMPLETED" android:name="OnBootReciever"></receiver>
         <service android:name="CommandPollerService"></service>
-        <service android:name="FunctionsService"></service>
     </application>
 
 </manifest>
