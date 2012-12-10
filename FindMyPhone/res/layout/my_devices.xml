@@ -164,6 +164,7 @@
                         android:scrollHorizontally="false"
                         android:maxLines="3"
                         android:maxWidth="200sp"
+                        android:textColor="@android:color/black"
                         android:background="@drawable/messagebackground"
                         android:layout_marginTop="10dp"/>
 

@@ -22,12 +22,13 @@ public class CommandPollerService extends IntentService {
 	private ServerSocket ssocket;
 	
 	public CommandPollerService() {
-		super("CommandPoller");
+		super("CommandPollerService");
 
 	}
 
 	@Override
 	public void onCreate() {
+		super.onCreate();
 		try {
 			ssocket = new ServerSocket(5050);
 		} catch (IOException e) {
@@ -37,6 +38,7 @@ public class CommandPollerService extends IntentService {
 	
 	@Override
 	public void onDestroy() {
+		super.onDestroy();
 		try {
 			ssocket.close();
 		} catch (IOException e) {
