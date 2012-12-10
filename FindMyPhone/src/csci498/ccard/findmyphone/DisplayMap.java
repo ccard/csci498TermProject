@@ -102,7 +102,9 @@ public class DisplayMap extends MapActivity {
         	mc.setZoom(14);
         	gpsAccuracy = (float) 6.0;
         	locOther = new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6));
+        	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
         	updateOverlay();
+        	map.getOverlays().add(items);
         	other = new GetOther();
         	other.execute(otherPhone.getIpAddress());
         	
@@ -111,12 +113,12 @@ public class DisplayMap extends MapActivity {
     
     public void updateOverlay()
     {
-    	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
+    	items.clear();
     	items.addOverlay(new OverlayItem(loc, "Me", ""));
     	items.addOverlay(new OverlayItem(locOther, otherPhone.getName(),""));
-   
-    	map.getOverlays().add(items);
+    	Log.v("here", "hi");
     	map.invalidate();
+    	mc.setCenter(locOther);
     }
     
     @Override
@@ -140,7 +142,7 @@ public class DisplayMap extends MapActivity {
     {
     	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 		public Overlay(Drawable icon) {
-			super(icon);
+			super(boundCenterBottom(icon));
 			// TODO Auto-generated constructor stub
 		}
 		
@@ -150,10 +152,9 @@ public class DisplayMap extends MapActivity {
 			populate();
 		}
 		
-		public void updateItem(int item, OverlayItem overlay)
+		public void clear()
 		{
-			mOverlays.remove(item);
-			mOverlays.add(item, overlay);
+			mOverlays.clear();
 			populate();
 		}
 
