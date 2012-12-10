@@ -53,8 +53,6 @@ public class DisplayMap extends MapActivity {
        
         Intent intent = getIntent();
         if(intent != null) {
-        	locmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        	locmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER,0, 0, onLocChange);
         
         	map = (MapView)findViewById(R.id.mapview);
         	map.setBuiltInZoomControls(true);
@@ -124,43 +122,13 @@ public class DisplayMap extends MapActivity {
     @Override
     public void onDestroy() {
     	super.onDestroy();
-    	locmgr.removeUpdates(onLocChange);
     	if(other.getStatus() == AsyncTask.Status.RUNNING)
     	{
     		run.set(false);
     	}
     }
 
-    //this listens for changes for location of the phone inquestion
-    private LocationListener onLocChange = new LocationListener() {
-
-		public void onLocationChanged(Location location) {
-			if(location != null) {
-				int latE6 = (int)(location.getLatitude()*1E6);
-				int lonE6 = (int)(location.getLongitude()*1E6);
-				
-				gpsAccuracy = location.getAccuracy();
-				
-				//put methods here to allow alternate phone to get this phones location
-				loc = new GeoPoint(latE6,lonE6);
-				updateOverlay();
-				
-			}
-		}
-
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub			
-		}
-
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-		}
-
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-		}
-    	
-    };
+ 
 	
     @Override
 	protected boolean isRouteDisplayed() {
@@ -262,6 +230,7 @@ public class DisplayMap extends MapActivity {
 			int lon = (int) (Double.parseDouble(words[1]) * 1E6);
 			Log.v("THis","lat: "+lat+" lom: "+lon);
 			locOther = new GeoPoint(lat,lon);
+			loc = new GeoPoint((int)CurrentPhoneManager.getInstance().getPhone().getLastLattitude(),(int)CurrentPhoneManager.getInstance().getPhone().getLastLongitude());
 			
 			updateOverlay();
 		}
