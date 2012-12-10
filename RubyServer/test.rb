@@ -76,7 +76,11 @@ end
 def login(data)
 	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
 	if Integer(user_exists) != 0
-		user_id = $db.execute(GET_USER_ID_AUTH_STATEMENT, [data['email'], data['password_hash']])[0][0]
+		result = $db.execute(GET_USER_ID_AUTH_STATEMENT, [data['email'], data['password_hash']])[0][0]
+		if Integer(user_id) == 0
+			result "ERROR"
+		end
+		user_id = result[0][0]
 		phones = $db.execute(GET_ALL_PHONES, user_id)
 		phones_hash = Hash.new
 		phones.each do |phone|
@@ -117,4 +121,3 @@ rescue Exception => e
 	webserver.close
 	$db.close
 end
-

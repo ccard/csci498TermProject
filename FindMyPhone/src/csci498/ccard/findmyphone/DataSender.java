@@ -72,10 +72,11 @@ public class DataSender {
 
 		@Override
 		protected String doInBackground(String... params) {
+			Socket s = null;
 			try {
 				String ipAddress = params[0];
 				// Open the socket to the server
-				Socket s = new Socket(ipAddress, TCP_SERVER_PORT);
+				s = new Socket(ipAddress, TCP_SERVER_PORT);
 
 				// Create the reader and writer for data from the server
 				BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -98,6 +99,12 @@ public class DataSender {
 				Log.e(LOG_MSG, null, e);
 			} catch (IOException e) {
 				Log.e(LOG_MSG, null, e);
+			} finally {
+				try {
+					s.close();
+				} catch (IOException e) {
+					Log.e(LOG_MSG, null, e);
+				}
 			}
 			return "";
 		}

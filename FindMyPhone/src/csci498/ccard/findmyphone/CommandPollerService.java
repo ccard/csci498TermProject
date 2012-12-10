@@ -40,8 +40,9 @@ public class CommandPollerService extends IntentService {
 	public void getAndExecuteCommand() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		while (connectivityManager.getActiveNetworkInfo().isConnected()) {
+			Socket s = null;
 			try {
-				Socket s = ssocket.accept();
+				s = ssocket.accept();
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
@@ -63,6 +64,12 @@ public class CommandPollerService extends IntentService {
 				s.close();
 			} catch (Exception e) {
 				Log.e(LOG_MSG, null, e);
+			} finally {
+				try {
+					s.close();
+				} catch (IOException e) {
+					Log.e(LOG_MSG, null, e);
+				}
 			}
 		}
 	}
