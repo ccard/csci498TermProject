@@ -6,6 +6,7 @@ require 'socket'
 
 $db = SQLite3::Database.open("phones.sqlite")
 webserver = TCPServer.new('138.67.77.103', 5050)
+UPDATE_LOCATION_STATEMENT = "UPDATE phone SET last_lattitude=?, last_longitude=? WHERE id_unique=?"
 USER_EXISTS_STATEMENT = "SELECT COUNT(*) FROM user WHERE email = ?"
 PHONE_EXISTS_STATEMENT = "SELECT COUNT(*) FROM phone WHERE id_unique = ?"
 GET_USER_ID_STATEMENT = "SELECT id FROM user WHERE email=?"
@@ -29,6 +30,8 @@ def handle_requests(request)
 		return remove_phone(data)			
 	elsif data['command'] == 'create_account'
 		return create_account(data)
+	elsif data['command'] == 'update_location'
+		return update_location(data)
 	else
 		puts "Unknown command: #{data['command']}"
 		return "ERROR"
@@ -42,6 +45,11 @@ def unique_phone?(id_unique)
 	else
 		return false
 	end
+end
+
+def update_location(data)
+	$db.execute(UPDATE_LOCATION_STATEMENT, [data['last_lattitude'], data['last_longitude'], data['id_unique']])
+	return "DONE"
 end
 
 def add_phone(data)
