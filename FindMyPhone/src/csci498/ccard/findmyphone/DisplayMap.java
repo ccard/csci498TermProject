@@ -74,26 +74,26 @@ public class DisplayMap extends MapActivity {
         	
         	mc = map.getController();
         	//CurrentPhoneManager.setPhoneLocation();
-        	double lattitude = 0;
-        	double longitude = 0;
-        	int i = 0;
-        	while (lattitude == 0 && longitude == 0 && i++ < 10) {
-	        	try {
-	        		Thread.sleep(30);
-	            	lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
-	            	longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
-	        	} catch (Exception e) {
-	        		Log.e("DisplayMap", null, e);
-	        	}
-        	}
-//        	double lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
-//        	double longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
+//        	double lattitude = 0;
+//        	double longitude = 0;
+//        	int i = 0;
+//        	while (lattitude == 0 && longitude == 0 && i++ < 10) {
+//	        	try {
+//	        		Thread.sleep(30);
+//	            	lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
+//	            	longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
+//	        	} catch (Exception e) {
+//	        		Log.e("DisplayMap", null, e);
+//	        	}
+//        	}
+        	double lattitude = CurrentPhoneManager.getInstance().getPhone().getLastLattitude();
+        	double longitude = CurrentPhoneManager.getInstance().getPhone().getLastLongitude(); 
         	int lat = (int) (lattitude);
         	int lon = (int) (longitude);
         	loc = new GeoPoint(lat, lon);
         	mc.setCenter(loc);
         	mc.setZoom(14);
-        	locOther = new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6));
+        	locOther = new GeoPoint((int) (otherPhone.getLastLattitude()), (int) (otherPhone.getLastLongitude()));
         	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
         	updateOverlay();
         	map.getOverlays().add(items);
