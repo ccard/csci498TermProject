@@ -92,11 +92,10 @@ public class CurrentPhoneManager extends PhoneManager {
 		}
 		
 		public void onLocationChanged(Location location) {
-			if(location != null)
-			{
-			instance.phone.setLastLattitude(location.getLatitude()*1E6); 
-			instance.phone.setLastLongitude(location.getLongitude()*1E6);
-			locMgr.removeUpdates(onLocationChange);
+			if (location != null) {
+				instance.phone.setLastLattitude(location.getLatitude()*1E6); 
+				instance.phone.setLastLongitude(location.getLongitude()*1E6);
+				locMgr.removeUpdates(onLocationChange);
 			}
 		}
 
