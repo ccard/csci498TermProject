@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.RemoteViews.RemoteView;
 
 public class CommandPollerService extends IntentService {
 	
@@ -26,7 +25,6 @@ public class CommandPollerService extends IntentService {
 	
 	public CommandPollerService() {
 		super("CommandPollerService");
-
 	}
 
 	@Override
@@ -118,11 +116,14 @@ public class CommandPollerService extends IntentService {
 			} catch (Exception e) {
 				Log.e(LOG_MSG, null, e);
 			}
+			updateLocations(locations);
 			return locations; 
 		}
 		return null;
 	}
 
-
+	private void updateLocations(JSONObject locations) {
+		
+	}
 	
 }

@@ -12,18 +12,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -34,12 +29,10 @@ import com.google.android.maps.OverlayItem;
 
 public class DisplayMap extends MapActivity {
 
-	private LocationManager locmgr = null;	
 	private GeoPoint loc;
 	private GeoPoint locOther;
 	private MapController mc;
 	private Overlay items;
-	private float gpsAccuracy;
 	private Phone otherPhone;
 	private GetOther other;
 	private MapView map;
@@ -100,7 +93,6 @@ public class DisplayMap extends MapActivity {
         	loc = new GeoPoint(lat, lon);
         	mc.setCenter(loc);
         	mc.setZoom(14);
-        	gpsAccuracy = (float) 6.0;
         	locOther = new GeoPoint((int) (otherPhone.getLastLattitude() * 1E6), (int) (otherPhone.getLastLongitude() * 1E6));
         	items = new Overlay(getResources().getDrawable(R.drawable.droppin));
         	updateOverlay();
