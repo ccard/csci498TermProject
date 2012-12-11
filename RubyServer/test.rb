@@ -84,21 +84,22 @@ end
 def login(data)
 	user_exists = $db.execute(USER_EXISTS_STATEMENT, data['email'])[0][0]
 	if Integer(user_exists) != 0
-		result = $db.execute(GET_USER_ID_AUTH_STATEMENT, [data['email'], data['password_hash']])[0][0]
-		if Integer(user_id) == 0
-			result "ERROR"
-		end
-		user_id = result[0][0]
-		phones = $db.execute(GET_ALL_PHONES, user_id)
-		phones_hash = Hash.new
-		phones.each do |phone|
-			phone_hash = Hash.new
-			for i in 0..(phone.length - 1)
-				phone_hash[COLUMN_NAMES[i]] = phone[i]
+		result = $db.execute(GET_USER_ID_AUTH_STATEMENT, [data['email'], data['password_hash']])
+		begin
+			user_id = result[0][0]
+			phones = $db.execute(GET_ALL_PHONES, user_id)
+			phones_hash = Hash.new
+			phones.each do |phone|
+				phone_hash = Hash.new
+				for i in 0..(phone.length - 1)
+					phone_hash[COLUMN_NAMES[i]] = phone[i]
+				end
+				phones_hash[phone[1]] = phone_hash
 			end
-			phones_hash[phone[1]] = phone_hash
+			return phones_hash.to_json
+		rescue Exception => e
+			return "ERROR"
 		end
-		return phones_hash.to_json
 	else
 		return "ERROR"
 	end

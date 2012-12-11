@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.IntentService;
@@ -122,8 +123,14 @@ public class CommandPollerService extends IntentService {
 		return null;
 	}
 
-	private void updateLocations(JSONObject locations) {
-		
+	private void updateLocations(JSONObject locations) {		
+		try {
+			locations.put(getString(R.string.command), "update_location");
+			locations.put("id_unique", CurrentPhoneManager.getInstance().getPhone().getUniqueID());
+		} catch (JSONException e) {
+			Log.e(LOG_MSG, null, e);
+		}
+		DataSender.getInstance().sendToServer(locations.toString());
 	}
 	
 }

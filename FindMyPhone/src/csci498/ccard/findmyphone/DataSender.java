@@ -101,9 +101,8 @@ public class DataSender {
 				Log.e(LOG_MSG, null, e);
 			} finally {
 				try {
-					if(null != s)
-					{
-					s.close();
+					if(null != s) {
+						s.close();
 					}
 				} catch (IOException e) {
 					Log.e(LOG_MSG, null, e);

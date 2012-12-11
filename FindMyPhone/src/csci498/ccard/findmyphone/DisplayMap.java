@@ -176,7 +176,7 @@ public class DisplayMap extends MapActivity {
 			//pass in location in the format Latitude:Longitude
 			JSONObject phoneCommand = new JSONObject();
 			try {
-				phoneCommand.put(getString(R.string.command), R.string.get_location);
+				phoneCommand.put(getString(R.string.command), getString(R.string.get_location));
 			} catch (JSONException e) {
 				Log.e("DisplayMap", null, e);
 			}
